@@ -3,8 +3,6 @@ layout: page
 title: About
 ---
 
-This is the basic Bridgetown site template. You can find out more info about customizing your Bridgetown site, as well as basic Bridgetown usage documentation at [bridgetownrb.com](https://bridgetownrb.com/)
+Photography allows me to express my view of the world to you.
 
-You can find the source code for Bridgetown at GitHub:
-[bridgetownrb](https://github.com/bridgetownrb) /
-[bridgetown](https://github.com/bridgetownrb/bridgetown)
+You can find me on [Flickr](https://www.flickr.com/photos/143431890@N07/) and [Facebook](https://www.facebook.com/agne.vaitkeviciute.1).
