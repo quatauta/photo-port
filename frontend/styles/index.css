@@ -7,87 +7,42 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --body-background: #f2f2f2;
-  --body-color: #444;
-  --heading-color: black;
-  --action-color: #d64045;
-}
-
 body {
-  background: var(--body-background);
-  color: var(--body-color);
-  font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    "Helvetica", "Arial", sans-serif;
-  margin: 0 8px;
-  font-size: 108%;
-  line-height: 1.5;
+  @apply mx-2 my-0 font-sans leading-normal;
 }
 
 a {
-  color: var(--action-color);
-  text-decoration: underline;
-  text-decoration-color: #ffb088;
+  @apply text-indigo-600 underline;
 }
 
 h1 {
-  margin: 1rem 0 3rem;
-  text-align: center;
-  font-weight: 900;
-  font-size: 2.5rem;
-  color: var(--heading-color);
-  line-height: 1.2;
+  @apply mx-0 mt-4 mb-12 text-4xl text-center;
 }
 
 body > header {
-  margin: 1rem;
-  text-align: center;
+  @apply m-4 text-center;
 }
 
 body > header img {
-  display: inline-block;
-  width: 400px;
-  max-width: 100%;
+  @apply inline-block w-96 max-w-full;
 }
 
 body > nav ul {
-  margin: 2rem 0;
-  padding: 0;
-  list-style-type: none;
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  font-size: 1.3rem;
-  font-weight: bold;
+  @apply flex gap-6 justify-center p-0 mx-0 my-8 text-xl font-bold list-none;
 }
 
 body > nav a {
-  text-decoration: none;
+  @apply text-black no-underline;
 }
 
 main {
-  margin: 2rem auto 4rem;
-  max-width: 65rem;
-  min-height: calc(100vh - 200px);
-  padding: 25px 25px 50px;
-  background: white;
-  box-shadow: 2px 3px 3px #ddd;
-  border-radius: 3px;
-
-  @media (max-width: 500px) {
-    padding: 16px 16px 50px;
-  }
+  @apply px-4 pt-4 pb-12 mx-auto mt-8 mb-16 max-w-6xl bg-white rounded-xl border-2 drop-shadow-xl lg:px-6 lg:pt-6;
 }
 
 footer {
-  text-align: center;
-  margin-bottom: 4rem;
-  font-size: 1em;
+  @apply mb-16 text-base text-center;
 }
 
 hr {
-  border: none;
-  border-top: 2px dotted #bbb;
-  margin: 3rem 0;
+  @apply mx-0 my-12 border-t-2 border-dotted border-neutral-400;
 }
