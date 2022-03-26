@@ -1,11 +1,12 @@
-<header>
-  <img src="{{ '/images/logo.svg' | relative_url }}" alt="Logo" />
+<header class="m-4 text-center">
+  <img class="inline-block w-96 max-w-full" src="{{ '/images/logo.svg' | relative_url }}" alt="Logo" />
 </header>
 
 <nav>
-  <ul>
-    <li><a href="{{ '/' | relative_url }}">Home</a></li>
-    <li><a href="{{ '/about' | relative_url }}">About</a></li>
-    <li><a href="{{ '/posts' | relative_url }}">Posts</a></li>
+  <ul class="flex gap-6 justify-center p-0 mx-0 my-8 text-xl font-bold list-none">
+    <li><a class="text-black no-underline dark:text-slate-100" href="{{ '/' | relative_url }}">Home</a></li>
+    <li><a class="text-black no-underline dark:text-slate-100" href="{{ '/portfolio' | relative_url }}">Portfolio</a></li>
+    <!-- <li><a class="text-black no-underline dark:text-slate-100" href="{{ '/posts' | relative_url }}">Posts</a></li> -->
+    <li><a class="text-black no-underline dark:text-slate-100" href="{{ '/about' | relative_url }}">About</a></li>
   </ul>
 </nav>
