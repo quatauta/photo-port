@@ -3,7 +3,7 @@ layout: page
 title: Portfolio
 ---
 
-<section class="overflow-hidden">
+<!-- <section class="overflow-hidden"> -->
   <div class="container px-2 py-2 mx-auto">
     <div class="flex flex-wrap -m-1 md:-m-2">
       <div class="flex flex-wrap w-full md:w-1/2 lg:w-1/3">
@@ -38,4 +38,4 @@ title: Portfolio
       </div>
     </div>
   </div>
-</section>
+<!-- </section> -->
