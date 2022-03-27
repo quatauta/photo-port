@@ -58,6 +58,11 @@ You can deploy Bridgetown sites on hosts like Render or Vercel as well as trandi
 
 > Read the [Bridgetown Deployment Documentation](https://www.bridgetownrb.com/docs/deployment) for more information.
 
+## Visuals
+
+I build the logo with [Adobe Express Logo Maker](https://express.adobe.com/express-apps/logomaker/), the [Wilderness icon found at the Noun Project](https://thenounproject.com/term/wilderness/2771880), [Inkscape](https://inkscape.org/), the Noteworthy font ([Apple macOS system font](https://developer.apple.com/fonts/system-fonts/)), and
+[Jake Archibald's](https://github.com/jakearchibald) [SVGOMG](https://jakearchibald.github.io/svgomg/) SVG optimizer.
+
 ## Contributing
 
 If repo is on GitHub:
