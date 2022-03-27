@@ -1,3 +1,22 @@
-<footer class="mb-16 text-base text-center">
-  <a href="mailto:{{ metadata.email }}">{{ metadata.email }}</a>
+<footer>
+  <ul class="flex gap-6 justify-center list-none">
+    <li>
+      <a class="text-black no-underline dark:text-slate-100" href="https://www.flickr.com/photos/143431890@N07/">
+        <i class="fa-brands fa-flickr"></i>
+        Flickr
+      </a>
+    </li>
+    <li>
+      <a class="text-black no-underline dark:text-slate-100" href="https://www.facebook.com/agne.vaitkeviciute.1">
+        <i class="fa-brands fa-facebook-square"></i>
+        Facebook
+      </a>
+    </li>
+    <li>
+      <a class="text-black no-underline dark:text-slate-100" href="mailto:{{ metadata.email }}">
+        <i class="fa fa-square-envelope"></i>
+        {{ metadata.email }}
+      </a>
+    </li>
+  </ul>
 </footer>
