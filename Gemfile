@@ -29,3 +29,5 @@ gem "bridgetown", "~> 1.0.0"
 gem "puma", "~> 5.6"
 
 gem "bridgetown-content-security-policy", "~> 1.1", :group => :bridgetown_plugins
+
+gem "bridgetown-haml", "~> 1.1", :group => :bridgetown_plugins

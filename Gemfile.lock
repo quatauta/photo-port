@@ -44,6 +44,9 @@ GEM
       tilt (~> 2.0)
       webrick (~> 1.7)
       zeitwerk (~> 2.5)
+    bridgetown-haml (1.1.1)
+      bridgetown (>= 0.18, < 2.0)
+      haml (>= 5.1.2)
     bridgetown-paginate (1.0.0)
       bridgetown-core (= 1.0.0)
     colorator (1.1.0)
@@ -75,6 +78,9 @@ GEM
     faraday_middleware (1.2.0)
       faraday (~> 1.0)
     ffi (1.15.5)
+    haml (5.2.2)
+      temple (>= 0.8.0)
+      tilt
     hash_with_dot_access (1.2.0)
       activesupport (>= 5.0.0, < 8.0)
     i18n (1.10.0)
@@ -109,6 +115,7 @@ GEM
       activesupport (>= 6.0)
       erubi (>= 1.10)
       tilt (~> 2.0)
+    temple (0.8.2)
     terminal-table (1.8.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
     thor (1.2.1)
@@ -125,6 +132,7 @@ PLATFORMS
 DEPENDENCIES
   bridgetown (~> 1.0.0)
   bridgetown-content-security-policy (~> 1.1)
+  bridgetown-haml (~> 1.1)
   puma (~> 5.6)
 
 BUNDLED WITH
