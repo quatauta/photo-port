@@ -8,7 +8,7 @@ title: Portfolio
     <div class="p-2 transition-all hover:p-0">
         <a href="portfolio/1"><img id="1" class="block object-cover object-center w-full h-full rounded-lg" src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(1).webp"></a>
     </div>
-    <div class="p-2 shadow-lg transition-all hover:p-0">
+    <div class="p-2 transition-all hover:p-0">
         <a href="portfolio/2"><img id="2" class="block object-cover object-center w-full h-full rounded-lg" src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(2).webp"></a>
     </div>
     <div class="p-2 transition-all hover:p-0">
