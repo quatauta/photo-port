@@ -1,14 +1,14 @@
-<div class="flex gap-6 justify-center items-end p-0 mx-0 my-8 text-xl font-bold">
-  <header class="m-4 text-center"><!-- TODO Reduce to icon for small screens -->
+<div class="flex gap-12 justify-center items-end p-0 mx-0 font-bold lg:my-8 lg:text-xl">
+  <header><!-- TODO Reduce to icon for small screens -->
     <a class="no-underline" href="{{ '/' | relative_url }}">
-      <picture class="inline-block w-96 max-w-full" alt="{{ metadata.title | escape }}">
+      <picture class="inline-block w-52 max-w-full lg:w-96" alt="{{ metadata.title | escape }}">
         <source srcset="{{ '/images/logo-dark.svg' | relative_url }}" media="(prefers-color-scheme: dark)" >
         <img src="{{ '/images/logo.svg' | relative_url }}">
       </picture>
     </a>
   </header>
-  <nav><!-- TODO Reduce/stack/colapse for small screens -->
-    <ul class="flex gap-6 my-8 list-none">
+  <nav>
+    <ul class="grid grid-cols-1 gap-0 list-none lg:mb-4 lg:grid-cols-2 2xl:grid-cols-4 lg:gap-6">
       <li><a class="text-black no-underline dark:text-slate-100" href="{{ '/portfolio' | relative_url }}">Portfolio</a></li>
  <!-- <li><a class="text-black no-underline dark:text-slate-100" href="{{ '/posts' | relative_url }}">Posts</a></li> -->
       <li><a class="text-black no-underline dark:text-slate-100" href="{{ '/about' | relative_url }}">About</a></li>
