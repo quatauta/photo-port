@@ -1,11 +1,17 @@
 ---
-# Feel free to add content and custom Front Matter to this file.
-
 layout: default
 ---
 
-# Agne Vaitkeviciute Photography
-
-You can choose a [theme](https://github.com/topics/bridgetown-theme) or add some [plugins](https://www.bridgetownrb.com/plugins/) to get started quickly.
-
-Be sure to check out the [Bridgetown Cards](https://bridgetown.cards) community site for helpful tips & tricks.
+<div class="mx-auto">
+  <div class="grid grid-cols-1 gap-1 lg:grid-cols-2 2xl:grid-cols-3">
+    {% render "portfolio_cell", title: "1", id: "1" %}
+    {% render "portfolio_cell", title: "2", id: "2" %}
+    {% render "portfolio_cell", title: "3", id: "3" %}
+    {% render "portfolio_cell", title: "4", id: "4" %}
+    {% render "portfolio_cell", title: "5", id: "5" %}
+    {% render "portfolio_cell", title: "6", id: "6" %}
+    {% render "portfolio_cell", title: "7", id: "7" %}
+    {% render "portfolio_cell", title: "8", id: "8" %}
+    {% render "portfolio_cell", title: "9", id: "9" %}
+  </div>
+</div>
