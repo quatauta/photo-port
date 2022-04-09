@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -e
+
+echo "[ bin/run ] Starting bin/bridgetown start"
+bin/bridgetown start

@@ -49,6 +49,9 @@ GEM
       haml (>= 5.1.2)
     bridgetown-paginate (1.0.0)
       bridgetown-core (= 1.0.0)
+    bundler-audit (0.9.0.1)
+      bundler (>= 1.2.0, < 3)
+      thor (~> 1.0)
     colorator (1.1.0)
     concurrent-ruby (1.1.10)
     erubi (1.10.0)
@@ -111,6 +114,7 @@ GEM
       rack
     rouge (3.28.0)
     ruby2_keywords (0.0.5)
+    rufo (0.13.0)
     serbea (1.0.1)
       activesupport (>= 6.0)
       erubi (>= 1.10)
@@ -133,7 +137,9 @@ DEPENDENCIES
   bridgetown (~> 1.0.0)
   bridgetown-content-security-policy (~> 1.1)
   bridgetown-haml (~> 1.1)
+  bundler-audit (~> 0.9.0)
   puma (~> 5.6)
+  rufo (~> 0.13.0)
 
 BUNDLED WITH
    2.3.10

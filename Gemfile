@@ -31,3 +31,7 @@ gem "puma", "~> 5.6"
 gem "bridgetown-content-security-policy", "~> 1.1", :group => :bridgetown_plugins
 
 gem "bridgetown-haml", "~> 1.1", :group => :bridgetown_plugins
+
+gem "bundler-audit", "~> 0.9.0"
+
+gem "rufo", "~> 0.13.0"

@@ -1,0 +1,33 @@
+#!/bin/sh
+
+set -e
+
+echo "[ bin/ci ] Running unit tests"
+bin/bridgetown test
+
+echo "[ bin/ci ] Checking Ruby files formatting"
+bin/format-ruby --check ||
+  {
+    RC=$?
+    echo "!!! Please format Ruby files with bin/format-ruby !!!"
+    exit "${RC}"
+  }
+
+echo "[ bin/ci ] Checking Shell files syntax"
+shfmt -f . | while read -r FILE; do shellcheck "${FILE}"; done
+
+echo "[ bin/ci ] Checking Shell files formatting"
+bin/format-shell -d . ||
+  {
+    RC=$?
+    echo "!!! Please format Shell files with bin/format-shell !!!"
+    exit "${RC}"
+  }
+
+echo "[ bin/ci ] Analyzing Ruby gems for security vulnerabilities"
+bundle exec bundle audit check --update
+
+echo "[ bin/ci ] Analyzing Node modules for security vulnerabilities"
+yarn audit || true
+
+echo "[ bin/ci ] Done"

@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -e
+
+echo "[ bin/deploy ] Running bin/bridgetown clean"
+bin/bridgetown clean
+
+echo "[ bin/deploy ] Running bin/bridgetown deploy"
+bin/bridgetown deploy

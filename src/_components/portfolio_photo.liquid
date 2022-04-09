@@ -1,20 +1,22 @@
 <div class="relative text-lg lg:text-2xl">
+  {% if prev != "" %}
   <a href="../portfolio/{{ prev }}">
     <div class="absolute top-0 left-0 h-full">
       <i class="p-6 text-gray-500 rounded-tl-lg rounded-br-lg mix-blend-luminosity hover:bg-white/30 dark:hover:bg-black/30 fa-solid fa-chevron-left"></i>
     </div>
   </a>
+  {% endif %}
+  {% if next != "" %}
   <a href="../portfolio/{{ next }}">
     <div class="absolute top-0 right-0 h-full">
       <i class="p-6 text-gray-500 rounded-tr-lg rounded-bl-lg mix-blend-luminosity hover:bg-white/30 dark:hover:bg-black/30 fa-solid fa-chevron-right"></i>
     </div>
   </a>
+  {% endif %}
   <a href="../#{{ id }}">
     <div class="absolute right-0 -top-16">
       <i class="p-6 rounded-tr-lg rounded-bl-lg text-slate-900 dark:text-slate-100 hover:text-slate-500 fa fa-xmark"></i>
     </div>
   </a>
 </div>
-
-<img alt="{{ title }}" class="w-full h-full rounded-lg"
-     src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20({{ id }}).webp">
+<img src="{{ url }}" id="{{ id }}" alt="{{ title }}" class="w-full h-full rounded-lg">

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [[ $# -gt 0 ]]; then
+  shfmt -i 2 "${@}"
+  exit $?
+else
+  shfmt -i 2 -w .
+  exit $?
+fi
