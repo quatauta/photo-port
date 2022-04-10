@@ -1,0 +1,50 @@
+#!/usr/bin/env ruby
+
+require "bundler"
+require "bundler/inline"
+
+Bundler.configure
+
+gemfile do
+  source "https://rubygems.org"
+  gem "amazing_print"
+  gem "dotenv", require: "dotenv/load"
+  gem "flickr"
+end
+
+flickr_api_key = ENV["FLICKR_API_KEY"]
+flickr_api_shared_secret = ENV["FLICKR_API_SHARED_SECRET"]
+flickr_user_nsid = ENV["FLICKR_USER_NSID"]
+
+if false && flickr_api_key && flickr_api_shared_secret && flickr_user_nsid
+  flickr = Flickr.new(flickr_api_key, flickr_api_shared_secret)
+  photosets = flickr.photosets.getList(user_id: flickr_user_nsid)["photoset"]
+  portfolios = photosets.select { |set|
+    set["title"] =~ /portfolio/i  && set["count_photos"] > 0
+  }
+
+  portfolios.each do |set|
+    portfolio_photos = flickr.photosets.getPhotos(user_id: flickr_user_nsid, photoset_id: set["id"], media: :photos)
+    portfolio_photos["photo"].take(3).each do |photo|
+      flickr.photos.getInfo(photo_id: photo["id"], secret: photo["secret"])
+      flickr.photos.getSizes(photo_id: photo["id"])
+
+      begin
+        flickr.photos.getExif(photo_id: photo["id"], secret: photo["secret"])["exif"]
+      rescue
+      end
+
+      begin
+        flickr.photos.geo.getLocation(photo_id: photo["id"], secret: photo["secret"])
+      rescue
+      end
+    end
+  end
+end
+
+portfolios.each do |portfolio|
+  write_portfolio_page(portfolio)
+  portfolio.photos.each do |photo|
+    write_photo_page(portfolio, photo)
+  end
+end
