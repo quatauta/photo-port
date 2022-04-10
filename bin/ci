@@ -28,6 +28,6 @@ echo "[ bin/ci ] Analyzing Ruby gems for security vulnerabilities"
 bundle exec bundle audit check --update
 
 echo "[ bin/ci ] Analyzing Node modules for security vulnerabilities"
-yarn audit || true
+yarn audit
 
 echo "[ bin/ci ] Done"
