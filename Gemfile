@@ -28,10 +28,10 @@ gem "bridgetown", "~> 1.0.0"
 # (you can optionally limit this to the "development" group)
 gem "puma", "~> 5.6"
 
-gem "bridgetown-content-security-policy", "~> 1.1", :group => :bridgetown_plugins
+gem "bridgetown-content-security-policy", "~> 1.1", group: :bridgetown_plugins
 
-gem "bridgetown-haml", "~> 1.1", :group => :bridgetown_plugins
+gem "bridgetown-haml", "~> 1.1", group: :bridgetown_plugins
 
 gem "bundler-audit", "~> 0.9.0"
-
+gem "prettier", "~> 2.1.0"
 gem "rufo", "~> 0.13.0"

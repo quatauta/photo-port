@@ -1,0 +1,12 @@
+# .prettierignore
+
+.DS_Store
+.bridgetown-cache
+.env*
+.git
+config/esbuild.defaults.js
+fontawesome-free
+jit-refresh.css
+node_modules
+output
+plugins

@@ -1,0 +1,6 @@
+# .prettierrc
+
+printWidth: 120
+tabWidth: 2
+useTabs: false
+rubySingleQuote: false

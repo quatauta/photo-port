@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [[ $# -gt 0 ]]; then
+  ./node_modules/.bin/prettier --no-error-on-unmatched-pattern "${@}"
+  exit $?
+else
+  ./node_modules/.bin/prettier --no-error-on-unmatched-pattern --write .
+  exit $?
+fi

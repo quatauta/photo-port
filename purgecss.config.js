@@ -1,4 +1,4 @@
 module.exports = {
-  content: ['frontend/javascript/*.js','./output/**/*.html'],
-  output: "./output/_bridgetown/static"
-}
+  content: ["frontend/javascript/*.js", "./output/**/*.html"],
+  output: "./output/_bridgetown/static",
+};
