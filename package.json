@@ -7,7 +7,6 @@
     "esbuild-dev": "node esbuild.config.js --watch"
   },
   "devDependencies": {
-    "@prettier/plugin-ruby": "^2.1.0",
     "cssnano": "^5.1.5",
     "esbuild": "^0.14.32",
     "glob": "^7.2.0",

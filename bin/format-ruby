@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [[ $# -gt 0 ]]; then
+  bundle exec rubocop "${@}"
+  exit $?
+else
+  bundle exec rubocop --format=simple --auto-correct .
+  exit $?
+fi

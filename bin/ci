@@ -15,6 +15,9 @@ echo "[ bin/ci ] Analyzing Node modules for security vulnerabilities"
 yarn audit
 
 echo "[ bin/ci ] Checking syntax/formatting"
-bin/format --check bin/* .
+bin/format --check .
+
+echo "[ bin/ci ] Checking Ruby syntax/formatting"
+bin/format-ruby --format=simple
 
 echo "[ bin/ci ] Done"
