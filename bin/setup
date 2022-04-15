@@ -4,10 +4,12 @@ require "pathname"
 
 def setup
   log "💎 Installing gems"
+
   # Only do bundle install if the much-faster bundle check indicates we need to
   system! "bundle check || bundle install"
 
   log "☕️ Installing Node modules"
+
   # Only do yarn install if the much-faster yarn check indicates we need to. Note that
   # --check-files is needed to force Yarn to actually examine what's in node_modules
   system! "bin/yarn check --check-files || bin/yarn install"
@@ -26,8 +28,14 @@ def help
   log "  bin/run"
   log "     # run app locally"
   log ""
+  log "  bin/deploy"
+  log "     # build site into ./output/, ready for deployment"
+  log ""
   log "  bin/ci"
   log "     # runs all test and checks as CI would"
+  log ""
+  log "  bin/format"
+  log "     # formats all files"
   log ""
   log "  bin/setup help"
   log "     # Show this help"
@@ -57,8 +65,4 @@ end
 
 # end of helpers
 
-if ARGV[0] == "help"
-  help
-else
-  setup
-end
+ARGV[0] == "help" ? help : setup

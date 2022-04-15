@@ -4,6 +4,6 @@ if [[ $# -gt 0 ]]; then
   ./node_modules/.bin/prettier --no-error-on-unmatched-pattern "${@}"
   exit $?
 else
-  ./node_modules/.bin/prettier --no-error-on-unmatched-pattern --write .
+  ./node_modules/.bin/prettier --no-error-on-unmatched-pattern --write bin/* .
   exit $?
 fi
