@@ -8,43 +8,104 @@ Bundler.configure
 gemfile do
   source "https://rubygems.org"
   gem "amazing_print"
+  gem "cri"
   gem "dotenv", require: "dotenv/load"
   gem "flickr"
 end
 
-flickr_api_key = ENV["FLICKR_API_KEY"]
-flickr_api_shared_secret = ENV["FLICKR_API_SHARED_SECRET"]
-flickr_user_nsid = ENV["FLICKR_USER_NSID"]
+class PortfolioSortOrderTransformer
+  SORT_ORDERS = %i[set taken views comments]
+  def call(string)
+    regex = Regexp.new("^#{string}", Regexp::IGNORECASE)
+    sort_order = SORT_ORDERS.find { |s| regex.match(s) }
+    raise unless sort_order
+    sort_order
+  end
+end
 
-if false && flickr_api_key && flickr_api_shared_secret && flickr_user_nsid
-  flickr = Flickr.new(flickr_api_key, flickr_api_shared_secret)
-  photosets = flickr.photosets.getList(user_id: flickr_user_nsid)["photoset"]
-  portfolios = photosets.select { |set|
-    set["title"] =~ /portfolio/i  && set["count_photos"] > 0
-  }
+command = Cri::Command.define do
+  name "flickr"
+  usage "flickr [options]"
+  summary "Build portfolio pages from Flickr albums/photosets"
+  description <<~EOS
+    Fetch Flickr albums/photosets called '...Portfolio...'.
+    For each portfolio, write a page with photos to src/portfolios/$NAME.md.
+    For each photo in a portfolio, write a page to src/portfolios/$NAME/$PHOTO.md.
+  EOS
 
-  portfolios.each do |set|
-    portfolio_photos = flickr.photosets.getPhotos(user_id: flickr_user_nsid, photoset_id: set["id"], media: :photos)
-    portfolio_photos["photo"].take(3).each do |photo|
-      flickr.photos.getInfo(photo_id: photo["id"], secret: photo["secret"])
-      flickr.photos.getSizes(photo_id: photo["id"])
+  flag :h, :help, "show help for this command" do |value, cmd|
+    puts cmd.help
+    exit 0
+  end
+  option :k, :key, "Flickr API key; or $FLICKR_API_KEY (in .env)", argument: :required
+  option :s, :secret, "Flickr API shared secret; or $FLICKR_API_SHARED_SECRET (in .env)", argument: :required
+  option :u, :user, "Flickr user ID / NSID; or $FLICKR_USER_NSID (in .env)", argument: :required
 
-      begin
-        flickr.photos.getExif(photo_id: photo["id"], secret: photo["secret"])["exif"]
-      rescue
-      end
+  run do |opts, args, cmd|
+    puts cmd.help
+    exit 0
+  end
+end
 
-      begin
-        flickr.photos.geo.getLocation(photo_id: photo["id"], secret: photo["secret"])
-      rescue
-      end
+command.define_command("list") do
+  name "list"
+  usage "list"
+  summary "List the portfolio albums/photosets and photos."
+
+  run do |opts, args, cmd|
+    puts "There will be a list ..."
+    key = opts[:key] || ENV["FLICKR_API_KEY"]
+    secret = opts[:secret] || ENV["FLICKR_API_SHARED_SECRET"]
+    user = opts[:user] || ENV["FLICKR_USER_NSID"]
+    flickr = Flickr.new(key, secret)
+    list_portfolios(flickr, user)
+  end
+end
+
+command.define_command("write") do
+  name "write"
+  usage "write"
+  summary "Write markdown pages for the portfolio albums/photosets and photos."
+
+  flag :f, :force, "(Over-)write markdown pages"
+  option :d, :dir, "Directory to write the markdown pages", argument: :required, default: "./src/portfolio"
+  option :s, :sort, "Sort phots by 'set' (order in the album/photoset), 'taken', 'views', 'comments'",
+    argument: :required,
+    default: :set,
+    transform: PortfolioSortOrderTransformer.new
+
+  run do |opts, args, cmd|
+    puts "There will be pages in #{opts[:dir]} sorted by #{opts[:sort]}... with force:#{opts[:force]}"
+  end
+end
+
+def list_portfolios(flickr, user)
+  flickr.photosets.getList(user_id: user)["photoset"].each do |set|
+    is_portfolio = set["title"] =~ /portfolio/i && set["count_photos"] > 0
+
+    puts "\n[%1<portfolio>s] %<user>s / %<title>s : %<photos>d photo(s)" % {
+      user: set["username"],
+      title: set["title"],
+      portfolio: is_portfolio ? "x" : "",
+      photos: set["count_photos"]
+    }
+
+    continue unless is_portfolio
+
+    flickr.photosets.getPhotos(user_id: user, photoset_id: set["id"], media: :photos)["photo"].each do |photo|
+      info = flickr.photos.getInfo(photo_id: photo["id"], secret: photo["secret"])
+      # sizes = flickr.photos.getSizes(photo_id: photo["id"])
+      # may throw error # exif = flickr.photos.getExif(photo_id: photo["id"], secret: photo["secret"])["exif"]
+      # may throw error # location = flickr.photos.geo.getLocation(photo_id: photo["id"], secret: photo["secret"])
+
+      puts "    %-40<title>s : %<taken>s, %4<views>d views, %3<comments>d comments" % {
+        title: photo["title"],
+        taken: info["dates"]["taken"],
+        views: info["views"],
+        comments: info["comments"]
+      }
     end
   end
 end
 
-portfolios.each do |portfolio|
-  write_portfolio_page(portfolio)
-  portfolio.photos.each do |photo|
-    write_photo_page(portfolio, photo)
-  end
-end
+command.run(ARGV) if __FILE__ == $0
