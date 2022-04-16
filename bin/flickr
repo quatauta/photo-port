@@ -8,78 +8,42 @@ Bundler.configure
 gemfile do
   source "https://rubygems.org"
   gem "amazing_print"
-  gem "cri"
   gem "dotenv", require: "dotenv/load"
   gem "flickr"
+  gem "thor"
 end
 
-class PortfolioSortOrderTransformer
-  SORT_ORDERS = %i[set taken views comments]
-  def call(string)
-    regex = Regexp.new("^#{string}", Regexp::IGNORECASE)
-    sort_order = SORT_ORDERS.find { |s| regex.match(s) }
-    raise unless sort_order
-    sort_order
+module PhotoPort
+  class CommandLine < Thor
+    class_option :key, desc: "Flickr API key; or $FLICKR_API_KEY (in .env)"
+    class_option :secret, desc: "Flickr API shared secret; or $FLICKR_API_SHARED_SECRET (in .env)"
+    class_option :user, desc: "Flickr user ID / NSID; or $FLICKR_USER_NSID (in .env)"
+    class_option :sort, desc: "Sorting order of photos", default: "set", enum: %w[set taken views comments]
+
+    desc "list", "List the portfolio albums/photosets and photos."
+    def list
+      puts "There will be a list ..."
+      key = options[:key] || ENV["FLICKR_API_KEY"]
+      secret = options[:secret] || ENV["FLICKR_API_SHARED_SECRET"]
+      user = options[:user] || ENV["FLICKR_USER_NSID"]
+      list_portfolios(key, secret, user)
+    end
+
+    desc "write", "Write markdown pages for the portfolio albums/photosets and photos."
+    option :dir, desc: "Directory to write the markdown pages", default: "./src/portfolio"
+    option :force, type: :boolean, desc: "Write markdown pages, overwriting existing markdown files", default: false
+    def write
+      puts "There will be pages in #{options[:dir]} sorted by #{options[:sort]} ... with force:#{options[:force]} ..."
+    end
+
+    def self.exit_on_failure?
+      true
+    end
   end
 end
 
-command = Cri::Command.define do
-  name "flickr"
-  usage "flickr [options]"
-  summary "Build portfolio pages from Flickr albums/photosets"
-  description <<~EOS
-    Fetch Flickr albums/photosets called '...Portfolio...'.
-    For each portfolio, write a page with photos to src/portfolios/$NAME.md.
-    For each photo in a portfolio, write a page to src/portfolios/$NAME/$PHOTO.md.
-  EOS
-
-  flag :h, :help, "show help for this command" do |value, cmd|
-    puts cmd.help
-    exit 0
-  end
-  option :k, :key, "Flickr API key; or $FLICKR_API_KEY (in .env)", argument: :required
-  option :s, :secret, "Flickr API shared secret; or $FLICKR_API_SHARED_SECRET (in .env)", argument: :required
-  option :u, :user, "Flickr user ID / NSID; or $FLICKR_USER_NSID (in .env)", argument: :required
-
-  run do |opts, args, cmd|
-    puts cmd.help
-    exit 0
-  end
-end
-
-command.define_command("list") do
-  name "list"
-  usage "list"
-  summary "List the portfolio albums/photosets and photos."
-
-  run do |opts, args, cmd|
-    puts "There will be a list ..."
-    key = opts[:key] || ENV["FLICKR_API_KEY"]
-    secret = opts[:secret] || ENV["FLICKR_API_SHARED_SECRET"]
-    user = opts[:user] || ENV["FLICKR_USER_NSID"]
-    flickr = Flickr.new(key, secret)
-    list_portfolios(flickr, user)
-  end
-end
-
-command.define_command("write") do
-  name "write"
-  usage "write"
-  summary "Write markdown pages for the portfolio albums/photosets and photos."
-
-  flag :f, :force, "(Over-)write markdown pages"
-  option :d, :dir, "Directory to write the markdown pages", argument: :required, default: "./src/portfolio"
-  option :s, :sort, "Sort phots by 'set' (order in the album/photoset), 'taken', 'views', 'comments'",
-    argument: :required,
-    default: :set,
-    transform: PortfolioSortOrderTransformer.new
-
-  run do |opts, args, cmd|
-    puts "There will be pages in #{opts[:dir]} sorted by #{opts[:sort]}... with force:#{opts[:force]}"
-  end
-end
-
-def list_portfolios(flickr, user)
+def list_portfolios(key, secret, user)
+  flickr = Flickr.new(key, secret)
   flickr.photosets.getList(user_id: user)["photoset"].each do |set|
     is_portfolio = set["title"] =~ /portfolio/i && set["count_photos"] > 0
 
@@ -99,7 +63,7 @@ def list_portfolios(flickr, user)
       # may throw error # location = flickr.photos.geo.getLocation(photo_id: photo["id"], secret: photo["secret"])
 
       puts "    %-40<title>s : %<taken>s, %4<views>d views, %3<comments>d comments" % {
-        title: photo["title"],
+        title: photo["title"].length <= 40 ? photo["title"] : photo["title"].sub(/^(.{39}).*/, "\\1…"),
         taken: info["dates"]["taken"],
         views: info["views"],
         comments: info["comments"]
@@ -108,4 +72,4 @@ def list_portfolios(flickr, user)
   end
 end
 
-command.run(ARGV) if __FILE__ == $0
+PhotoPort::CommandLine.start(ARGV) if __FILE__ == $0
