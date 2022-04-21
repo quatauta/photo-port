@@ -35,4 +35,5 @@ yarn-debug.log*
 .yarn-integrity
 
 frontend/styles/jit-refresh.css
+.cache
 .env

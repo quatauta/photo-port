@@ -2,6 +2,8 @@
 
 require "bundler"
 require "bundler/inline"
+require "fileutils"
+require "json"
 require "time"
 
 Bundler.configure
@@ -11,92 +13,142 @@ gemfile do
   gem "amazing_print"
   gem "cri"
   gem "dotenv", require: "dotenv/load"
+  gem "gitlab_chronic_duration"
   gem "flickr"
 end
 
-def list_portfolios(flickr, user, directory, write)
-  flickr.photosets.getList(user_id: user)["photoset"].each do |set|
-    is_portfolio = set["title"] =~ /portfolio/i && set["count_photos"] > 0
+def list_portfolios(flickr, user, cache_dir, cache_retention_seconds)
+  FileUtils.mkdir_p(cache_dir)
 
-    puts "\n[%1<portfolio>s] %<user>s / %<title>s : %<photos>d photo(s), updated %<updated>s" % {
-      user: set["username"],
-      title: set["title"],
-      portfolio: is_portfolio ? "x" : "",
-      photos: set["count_photos"],
-      updated: Time.strptime(set["date_update"], "%s")
-    }
+  photosets_cache = "#{cache_dir}/photosets_#{user}.json"
+  puts "fetching photosets for user #{user}"
+  photosets = flickr.photosets.getList(user_id: user)["photoset"].map { |response| response.to_hash }
 
-    if is_portfolio
-      flickr.photosets.getPhotos(user_id: user, photoset_id: set["id"], media: :photos)["photo"].each do |photo|
-        info = flickr.photos.getInfo(photo_id: photo["id"], secret: photo["secret"])
+  File.write(photosets_cache, JSON[photosets])
+
+  photosets.each do |set|
+    photoset_photos_cache = "#{cache_dir}/photoset_photos_#{set["id"]}.json"
+    photoset_photos_cache_time = Time.strptime(set["date_update"], "%s")
+    photoset_photos = nil
+
+    if File.exist?(photoset_photos_cache) && photoset_photos_cache_time <= File.mtime(photoset_photos_cache)
+      puts "photoset #{set["id"]} photo list cached in #{photoset_photos_cache} (updated #{photoset_photos_cache_time})"
+      photoset_photos = JSON.load_file(photoset_photos_cache)
+    else
+      puts "fetching photoset #{set["id"]} photo list"
+      photoset_photos = flickr.photosets.getPhotos(user_id: user, photoset_id: set["id"], media: :photos)["photo"].map { |response| response.to_hash }
+      File.write(photoset_photos_cache, JSON[photoset_photos])
+      File.utime(photoset_photos_cache_time, photoset_photos_cache_time, photoset_photos_cache)
+    end
+
+    photoset_photos&.each do |photo|
+      photo_cache = "#{cache_dir}/photo_#{photo["id"]}.json"
+
+      if File.exist?(photo_cache) && File.ctime(photo_cache) > (Time.now - cache_retention_seconds)
+        puts "photo #{photo["id"]} info cached in #{photo_cache} (updated #{File.ctime(photo_cache)})"
+      else
+        puts "fetching photo #{photo["id"]} info"
+        info = flickr.photos.getInfo(photo_id: photo["id"], secret: photo["secret"]).to_hash.transform_values { |value| value.respond_to?(:to_hash) ? value.to_hash : value }
+        photo_cache_time = Time.strptime(info["dates"]["lastupdate"], "%s")
         # sizes = flickr.photos.getSizes(photo_id: photo["id"])
-        # may throw error # exif = flickr.photos.getExif(photo_id: photo["id"], secret: photo["secret"])["exif"]
-        # may throw error # location = flickr.photos.geo.getLocation(photo_id: photo["id"], secret: photo["secret"])
 
-        puts "    %-40<title>s : %<taken>s, %4<views>d views, %3<comments>d comments, %<updated>s" % {
-          title: photo["title"].length <= 40 ? photo["title"] : photo["title"].sub(/^(.{39}).*/, "\\1…"),
-          taken: info["dates"]["taken"],
-          views: info["views"],
-          comments: info["comments"],
-          updated: Time.strptime(info["dates"]["lastupdate"], "%s")
-        }
+        if !File.exist?(photo_cache) || photo_cache_time > File.mtime(photo_cache)
+          puts "fetching photo #{photo["id"]} exif"
+          exif = nil
+          begin
+            exif = flickr.photos.getExif(photo_id: photo["id"], secret: photo["secret"])
+          rescue
+          end
+          info["exif"] = exif && exif["exif"].map { |value| value.respond_to?(:to_hash) ? value.to_hash : value }
+
+          puts "fetching photo #{photo["id"]} location"
+          location = nil
+          begin
+            location = flickr.photos.geo.getLocation(photo_id: photo["id"], secret: photo["secret"])
+          rescue
+          end
+          info["location"] = location && location["location"].to_hash
+
+          puts "fetching photo #{photo["id"]} sizes"
+          sizes = nil
+          begin
+            sizes = flickr.photos.getSizes(photo_id: photo["id"])
+          rescue
+          end
+          info["sizes"] = sizes && sizes["size"].map { |value| value.to_hash }
+
+          File.write(photo_cache, JSON[info])
+          File.utime(photo_cache_time, photo_cache_time, photo_cache)
+        else
+          puts "photo #{photo["id"]} info cached in #{photo_cache} (update #{photo_cache_time})"
+        end
       end
     end
   end
 end
 
 module PhotoPort
-  class Command
-    class Runner < Cri::CommandRunner
-      def run
-        key = options[:key] || ENV["FLICKR_API_KEY"]
-        secret = options[:secret] || ENV["FLICKR_API_SHARED_SECRET"]
-        user = options[:user] || ENV["FLICKR_USER_NSID"]
-        flickr = Flickr.new(key, secret)
-        list_portfolios(flickr, user, options[:dir], options[:write])
-      end
-    end
+  module Flickr
+    class Command
+      class Runner < Cri::CommandRunner
+        def run
+          ChronicDuration.raise_exceptions = true
 
-    def initialize
-      @command = define_command
-    end
+          cache_dir = options[:cache] || ENV["FLICKR_CACHE"]
+          cache_retention_seconds = ChronicDuration.parse(options[:retention] || ENV["FLICKR_RETENTION"])
+          empty_cache = options[:"empty-cache"] || %w[t true y yes 1].include?(ENV["FLICKR_EMPTY_CACHE"]&.downcase)
+          key = options[:key] || ENV["FLICKR_KEY"]
+          secret = options[:secret] || ENV["FLICKR_SECRET"]
+          user = options[:user] || ENV["FLICKR_USER"]
 
-    def define_command
-      Cri::Command.define do
-        name $PROGRAM_NAME.to_s
-        usage "#{$PROGRAM_NAME} [--key=API_KEY] [--secret=API_SECRET] [--user=ID] [--write]"
-        summary "List Flickr user's portfolio albums/photosets and their photos"
-        description <<~EOS
-          List the public portofolio albums or photosets of a Flickr user, using the Flickr API (https://www.flickr.com/services/api/).
-
-          With flag '--write', write Markdown/HTML files of portfolio gallery pages, and individual photos.
-
-          The Flickr API requires an API key and shared secret from your Flickr account. You can create them by logging in to Flickr, and creating an application at https://www.flickr.com/services/apps/create/apply.
-
-          You have three ways to provide the Flickr API key, shared secret, and Flickr user ID of the owner of albums/photosets: (mix as you like)
-
-          (1) Commandline options -k/--key, -s/--secret, -u/--user (highest priority)
-
-          (2) Environment variables FLICKR_API_KEY, FLICKR_API_SHARED_SECRET, FLICKR_USER_NSID
-
-          (3) File '.env' in the current directory with variables FLICKR_API_KEY, FLICKR_API_SHARED_SECRET, FLICKR_USER_NSID. '.env' is parsed by rrubygem 'dotenv' (see https://www.rubydoc.info/gems/dotenv#usage). (lowest priority)
-        EOS
-
-        runner Runner
-        option :k, :key, "Flickr API key; or $FLICKR_API_KEY (in .env)", argument: :required
-        option :s, :secret, "Flickr API shared secret; or $FLICKR_API_SHARED_SECRET (in .env)", argument: :required
-        option :u, :user, "Flickr user ID / NSID; or $FLICKR_USER_NSID (in .env)", argument: :required
-        option :d, :dir, "Directory to write the markdown pages", argument: :required, default: "./src/portfolio"
-        flag :w, :write, "Write markdown pages, overwrite existing markdown files"
-        flag :h, :help, "show help for this command" do |_value, cmd|
-          puts cmd.help
-          exit 0
+          flickr = ::Flickr.new(key, secret)
+          FileUtils::Verbose.rm_r(cache_dir, secure: true) if empty_cache
+          list_portfolios(flickr, user, cache_dir, cache_retention_seconds)
         end
       end
-    end
 
-    def run(opts_and_args)
-      @command.run(opts_and_args)
+      def initialize
+        @command = define_command
+      end
+
+      def define_command
+        Cri::Command.define do
+          name $PROGRAM_NAME.to_s
+          usage "#{$PROGRAM_NAME} [--key=API_KEY] [--secret=API_SECRET] [--user=ID] [--write]"
+          summary "List Flickr user's portfolio albums/photosets and their photos"
+          description <<~EOS
+            List the public portofolio albums or photosets of a Flickr user, using the Flickr API (https://www.flickr.com/services/api/).
+
+            With flag '--write', write Markdown/HTML files of portfolio gallery pages, and individual photos.
+
+            The Flickr API requires an API key and shared secret from your Flickr account. You can create them by logging in to Flickr, and creating an application at https://www.flickr.com/services/apps/create/apply.
+
+            You have three ways to provide option values: (mix as you like)
+
+            (1) Commandline options like -k/--key, -s/--secret, -u/--user, etc. (highest priority)
+
+            (2) Environment variables like FLICKR_KEY, FLICKR_SECRET, FLICKR_USER, etc.
+
+            (3) File '.env' in the current directory with variables FLICKR_KEY, FLICKR_SECRET, FLICKR_USER, etc. '.env' is parsed by rrubygem 'dotenv' (see https://www.rubydoc.info/gems/dotenv#usage). (lowest priority)
+          EOS
+
+          runner Runner
+          option :k, :key, "Flickr API key; or $FLICKR_KEY (in .env)", argument: :required
+          option :s, :secret, "Flickr API shared secret; or $FLICKR_SECRET (in .env)", argument: :required
+          option :u, :user, "Flickr user ID / NSID; or $FLICKR_USER (in .env)", argument: :required
+          option :c, :cache, "Directory to cache Flickr API results; or $FLICKR_CACHE", argument: :required, default: "src/_data/flickr"
+          option :r, :retention, "Minimum retention of photo cache in cache directory; or $FLICKR_RETENTION", argument: :required, default: "1 day"
+          flag nil, :"empty-cache", "Remove all cached Flickr API results in cache directory; or $FLICKR_EMPTY_CACHE"
+          flag :h, :help, "show help for this command" do |_value, cmd|
+            puts cmd.help
+            exit 0
+          end
+        end
+      end
+
+      def run(opts_and_args)
+        @command.run(opts_and_args)
+      end
     end
   end
 end
@@ -114,4 +166,4 @@ if $stdout.tty? && ENV["TERM"] != "dump"
   end
 end
 
-PhotoPort::Command.new.run(ARGV) if __FILE__ == $0
+PhotoPort::Flickr::Command.new.run(ARGV) if __FILE__ == $0
