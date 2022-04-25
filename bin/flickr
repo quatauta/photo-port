@@ -18,16 +18,15 @@ gemfile do
 end
 
 def list_portfolios(flickr, user, cache_dir, cache_retention_seconds)
-  FileUtils.mkdir_p(cache_dir)
-
-  photosets_cache = "#{cache_dir}/photosets_#{user}.json"
+  photosets_cache = "#{cache_dir}/photosets.json"
   puts "fetching photosets for user #{user}"
   photosets = flickr.photosets.getList(user_id: user)["photoset"].map { |response| response.to_hash }
 
+  FileUtils.mkdir_p(File.dirname(photosets_cache))
   File.write(photosets_cache, JSON[photosets])
 
   photosets.each do |set|
-    photoset_photos_cache = "#{cache_dir}/photoset_photos_#{set["id"]}.json"
+    photoset_photos_cache = "#{cache_dir}/photoset/#{set["id"]}.json"
     photoset_photos_cache_time = Time.strptime(set["date_update"], "%s")
     photoset_photos = nil
 
@@ -37,12 +36,14 @@ def list_portfolios(flickr, user, cache_dir, cache_retention_seconds)
     else
       puts "fetching photoset #{set["id"]} photo list"
       photoset_photos = flickr.photosets.getPhotos(user_id: user, photoset_id: set["id"], media: :photos)["photo"].map { |response| response.to_hash }
+
+      FileUtils.mkdir_p(File.dirname(photoset_photos_cache))
       File.write(photoset_photos_cache, JSON[photoset_photos])
       File.utime(photoset_photos_cache_time, photoset_photos_cache_time, photoset_photos_cache)
     end
 
     photoset_photos&.each do |photo|
-      photo_cache = "#{cache_dir}/photo_#{photo["id"]}.json"
+      photo_cache = "#{cache_dir}/photo/#{photo["id"]}.json"
 
       if File.exist?(photo_cache) && File.ctime(photo_cache) > (Time.now - cache_retention_seconds)
         puts "photo #{photo["id"]} info cached in #{photo_cache} (updated #{File.ctime(photo_cache)})"
@@ -50,7 +51,6 @@ def list_portfolios(flickr, user, cache_dir, cache_retention_seconds)
         puts "fetching photo #{photo["id"]} info"
         info = flickr.photos.getInfo(photo_id: photo["id"], secret: photo["secret"]).to_hash.transform_values { |value| value.respond_to?(:to_hash) ? value.to_hash : value }
         photo_cache_time = Time.strptime(info["dates"]["lastupdate"], "%s")
-        # sizes = flickr.photos.getSizes(photo_id: photo["id"])
 
         if !File.exist?(photo_cache) || photo_cache_time > File.mtime(photo_cache)
           puts "fetching photo #{photo["id"]} exif"
@@ -77,6 +77,7 @@ def list_portfolios(flickr, user, cache_dir, cache_retention_seconds)
           end
           info["sizes"] = sizes && sizes["size"].map { |value| value.to_hash }
 
+          FileUtils.mkdir_p(File.dirname(photo_cache))
           File.write(photo_cache, JSON[info])
           File.utime(photo_cache_time, photo_cache_time, photo_cache)
         else

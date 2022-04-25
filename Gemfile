@@ -33,3 +33,6 @@ gem "bridgetown-haml", "~> 1.1", group: :bridgetown_plugins
 
 gem "bundler-audit", "~> 0.9.0"
 gem "standard", "~> 1.10"
+
+gem "dotenv", "~> 2.7.0"
+gem "flickr", "~> 2.0.0"

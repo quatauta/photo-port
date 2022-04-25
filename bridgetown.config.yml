@@ -27,5 +27,5 @@ template_engine: liquid
 # update `publicPath`.
 
 timezone: Europe/Luxembourg
-# pagination:
-#   enabled: true
+pagination:
+  enabled: true

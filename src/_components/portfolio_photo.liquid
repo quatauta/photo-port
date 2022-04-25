@@ -1,22 +1,41 @@
+{% if description %}
+<div class="text-center mb-4">
+  {{ description }}
+</div>
+{% endif %}
+
 <div class="relative text-lg lg:text-2xl">
-  {% if prev != "" %}
-  <a href="../portfolio/{{ prev }}">
+  {% if prev_url -%}
+  <a href="{{ prev_url }}">
     <div class="absolute top-0 left-0 h-full">
       <i class="p-6 text-gray-500 rounded-tl-lg rounded-br-lg mix-blend-luminosity hover:bg-white/30 dark:hover:bg-black/30 fa-solid fa-chevron-left"></i>
     </div>
   </a>
-  {% endif %}
-  {% if next != "" %}
-  <a href="../portfolio/{{ next }}">
+  {% endif -%}
+  {% if next_url -%}
+  <a href="{{ next_url }}">
     <div class="absolute top-0 right-0 h-full">
       <i class="p-6 text-gray-500 rounded-tr-lg rounded-bl-lg mix-blend-luminosity hover:bg-white/30 dark:hover:bg-black/30 fa-solid fa-chevron-right"></i>
     </div>
   </a>
-  {% endif %}
+  {% endif -%}
   <a href="../#{{ id }}">
     <div class="absolute right-0 -top-16">
       <i class="p-6 rounded-tr-lg rounded-bl-lg text-slate-900 dark:text-slate-100 hover:text-slate-500 fa fa-xmark"></i>
     </div>
   </a>
 </div>
-<img src="{{ url }}" id="{{ id }}" alt="{{ title }}" class="w-full h-full rounded-lg">
+<img src="{{ source }}" id="{{ id }}" alt="{{ title }}" class="w-full h-full rounded-lg">
+
+{% if shutter_speed or aperture or focal_length or iso or flickr_url %}
+<div class="mx-auto">
+  <div class="flex place-content-center	gap-4">
+    {% if shutter_speed %}<div class="flex-initial">{{ shutter_speed }} sec</div>{% endif %}
+    {% if aperture      %}<div class="flex-initial">{{ aperture }}</div>{% endif %}
+    {% if focal_length  %}<div class="flex-initial">{{ focal_length }}</div>{% endif %}
+    {% if iso           %}<div class="flex-initial">ISO {{ iso }}</div>{% endif %}
+    {% if camera        %}<div class="flex-initial">{{ camera }}</div>{% endif %}
+    {% if flickr_url    %}<div class="flex-initial"><a class="text-black no-underline dark:text-slate-100" href="{{ flickr_url }}"><i class="fa-brands fa-flickr"></i></a></div>{% endif %}
+  </div>
+</div>
+{% endif %}

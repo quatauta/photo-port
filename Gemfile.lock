@@ -55,6 +55,7 @@ GEM
       thor (~> 1.0)
     colorator (1.1.0)
     concurrent-ruby (1.1.10)
+    dotenv (2.7.6)
     erubi (1.10.0)
     faraday (1.10.0)
       faraday-em_http (~> 1.0)
@@ -82,6 +83,7 @@ GEM
     faraday_middleware (1.2.0)
       faraday (~> 1.0)
     ffi (1.15.5)
+    flickr (2.0.2)
     haml (5.2.2)
       temple (>= 0.8.0)
       tilt
@@ -114,7 +116,7 @@ GEM
     rb-fsevent (0.11.1)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    regexp_parser (2.3.0)
+    regexp_parser (2.3.1)
     rexml (3.2.5)
     roda (3.55.0)
       rack
@@ -161,6 +163,8 @@ DEPENDENCIES
   bridgetown-content-security-policy (~> 1.1)
   bridgetown-haml (~> 1.1)
   bundler-audit (~> 0.9.0)
+  dotenv (~> 2.7.0)
+  flickr (~> 2.0.0)
   puma (~> 5.6)
   standard (~> 1.10)
 
