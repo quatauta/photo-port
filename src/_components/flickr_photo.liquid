@@ -19,7 +19,7 @@
     </div>
   </a>
   {% endif -%}
-  <a href="../#{{ id }}">
+  <a href="/{{ portfolio }}#{{ id }}">
     <div class="absolute right-0 -top-16">
       <i class="p-6 rounded-tr-lg rounded-bl-lg text-slate-900 dark:text-slate-100 hover:text-slate-500 fa fa-xmark"></i>
     </div>
@@ -27,15 +27,13 @@
 </div>
 <img src="{{ source }}" id="{{ id }}" alt="{{ title }}" class="w-full h-full rounded-lg">
 
-{% if shutter_speed or aperture or focal_length or iso or flickr_url %}
 <div class="mx-auto">
   <div class="flex place-content-center	gap-4">
     {% if shutter_speed %}<div class="flex-initial">{{ shutter_speed }} sec</div>{% endif %}
     {% if aperture      %}<div class="flex-initial">{{ aperture }}</div>{% endif %}
     {% if focal_length  %}<div class="flex-initial">{{ focal_length }}</div>{% endif %}
     {% if iso           %}<div class="flex-initial">ISO {{ iso }}</div>{% endif %}
-    {% if camera        %}<div class="flex-initial">{{ camera }}</div>{% endif %}
+    {% if make or model %}<div class="flex-initial">{{ make }} {{ model }}</div>{% endif %}
     {% if flickr_url    %}<div class="flex-initial"><a class="text-black no-underline dark:text-slate-100" href="{{ flickr_url }}"><i class="fa-brands fa-flickr"></i></a></div>{% endif %}
   </div>
 </div>
-{% endif %}

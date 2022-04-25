@@ -3,20 +3,47 @@ require "flickr"
 
 class Builders::FlickrPortfolio < SiteBuilder
   PHOTO_CONTENT = <<~EOS
-    {% render "portfolio_photo", id:              resource.data.slug,
-                                 flickr_url:      resource.data.flickr_url,
-                                 source:          resource.data.source,
-                                 title:           resource.data.title,
-                                 description:     resource.data.description,
-                                 camera:          resource.data.camera,
-                                 aperture:        resource.data.aperture,
-                                 focal_length:    resource.data.focal_length,
-                                 shutter_speed:   resource.data.shutter_speed,
-                                 iso:             resource.data.iso,
-                                 prev_url:        resource.previous.relative_url,
-                                 next_url:        resource.next.relative_url %}
+    {% assign make          = resource.data.exif | where: "tag", "Make"                    | map: "raw"   | first | capitalize -%}
+    {% assign model         = resource.data.exif | where: "tag", "Model"                   | map: "raw"   | first -%}
+    {% assign aperture      = resource.data.exif | where: "tag", "FNumber"                 | map: "clean" | first -%}
+    {% assign focal_length  = resource.data.exif | where: "tag", "FocalLengthIn35mmFormat" | map: "raw"   | first -%}
+    {% assign shutter_speed = resource.data.exif | where: "tag", "ExposureTime"            | map: "raw"   | first -%}
+    {% assign iso           = resource.data.exif | where: "tag", "ISO"                     | map: "raw"   | first -%}
+    {% render "flickr_photo", id:            resource.data.slug,
+                              flickr_url:    resource.data.flickr_url,
+                              source:        resource.data.source,
+                              title:         resource.data.title,
+                              description:   resource.data.description,
+                              portfolio:     resource.data.portfolio,
+                              make:          make,
+                              model:         model,
+                              aperture:      aperture,
+                              focal_length:  focal_length,
+                              shutter_speed: shutter_speed,
+                              iso:           iso,
+                              prev_url:      resource.previous.relative_url,
+                              next_url:      resource.next.relative_url -%}
   EOS
 
+  PORTFOLIO_CONTENT = <<~EOS
+    <div class="mx-auto">
+    <div class="grid grid-cols-1 gap-1 lg:grid-cols-2 2xl:grid-cols-3">
+    {% for photo in paginator.resources -%}
+    {%   if photo.data.info.rotation == 90 or photo.data.info.rotation == 270 -%}
+    {%     assign class = "row-span-2" -%}
+    {%   endif -%}
+    {%   render "flickr_portfolio_thumbnail",
+                 source:    photo.data.source,
+                 portfolio_url: resource.relative_url,
+                 id:        photo.data.slug,
+                 title:     photo.data.title,
+                 class:     class -%}
+    {% endfor -%}
+    </div>
+    </div>
+  EOS
+
+  # use JSON file cache like bin/flickr
   def cache
     @@cache ||= Bridgetown::Cache.new(self.class.to_s)
   end
@@ -26,6 +53,7 @@ class Builders::FlickrPortfolio < SiteBuilder
   end
 
   def flickr_photoset_photos(flickr, user_id, photoset)
+    # use JSON file cache like bin/flickr
     cache_key = "flickr_photoset_#{photoset["id"]}_photos_#{photoset["date_update"]}"
     cache.getset(cache_key) do
       puts "fetching #{user_id} photoset #{photoset["id"]} photo list"
@@ -38,6 +66,7 @@ class Builders::FlickrPortfolio < SiteBuilder
     secret = photo["secret"]
     last_update = photo["last_update"]
 
+    # use JSON file cache like bin/flickr
     cache_key = "flickr_photo_#{id}_#{last_update}"
     cache.getset(cache_key) do
       puts "fetching photo #{id} info"
@@ -51,8 +80,9 @@ class Builders::FlickrPortfolio < SiteBuilder
     id = photo["id"]
     secret = photo["secret"]
     last_update = photo["last_update"]
-    cache_key = "flickr_photo_exif_#{id}_#{last_update}"
 
+    # use JSON file cache like bin/flickr
+    cache_key = "flickr_photo_exif_#{id}_#{last_update}"
     cache.getset(cache_key) do
       exif = nil
 
@@ -70,8 +100,9 @@ class Builders::FlickrPortfolio < SiteBuilder
     id = photo["id"]
     secret = photo["secret"]
     last_update = photo["last_update"]
-    cache_key = "flickr_photo_location_#{id}_#{last_update}"
 
+    # use JSON file cache like bin/flickr
+    cache_key = "flickr_photo_location_#{id}_#{last_update}"
     cache.getset(cache_key) do
       location = nil
 
@@ -88,8 +119,9 @@ class Builders::FlickrPortfolio < SiteBuilder
   def flickr_photo_sizes(flickr, photo)
     id = photo["id"]
     last_update = photo["last_update"]
-    cache_key = "flickr_photo_sizes_#{id}_#{last_update}"
 
+    # use JSON file cache like bin/flickr
+    cache_key = "flickr_photo_sizes_#{id}_#{last_update}"
     cache.getset(cache_key) do
       sizes = nil
 
@@ -115,6 +147,10 @@ class Builders::FlickrPortfolio < SiteBuilder
     "#{index + 1}-#{photo_slug(photo, index)}.md"
   end
 
+  def portfolio_resource(set)
+    "#{portfolio_slug(set)}.md"
+  end
+
   def build
     builder_id = "builder://#{self.class.to_s.sub("::", ".")}"
     key = ENV["FLICKR_KEY"]
@@ -126,6 +162,20 @@ class Builders::FlickrPortfolio < SiteBuilder
     photosets = flickr_photosets(flickr, user)
 
     photosets.select { |set| set["title"] =~ /portfolio/i }.each do |set|
+      frontmatter = {
+        layout: "default",
+        pagination: {
+          collection: portfolio_slug(set),
+          per_page: 10,
+          sort_field: "relative_url",
+          sort_reverse: false
+        },
+      }
+      add_resource :pages, portfolio_resource(set) do
+        ___ frontmatter
+        content PORTFOLIO_CONTENT
+      end
+
       photoset_photos = flickr_photoset_photos(flickr, user, set)
 
       photoset_photos.each_with_index do |photo, index|
@@ -147,11 +197,8 @@ class Builders::FlickrPortfolio < SiteBuilder
           flickr_id: info["id"],
           flickr_url: Flickr.url_photopage(info),
           source: Flickr.url_o(info),
-          camera: %w[make model].map { |tag| exif.find { |exif| exif["tag"].downcase == tag.downcase }&.fetch("raw") }.join(" "),
-          aperture: exif.find { |exif| exif["tag"] =~ /FNumber/i }&.fetch("clean"),
-          focal_length: exif.find { |exif| exif["tag"] =~ /FocalLengthIn35mmFormat/i }&.fetch("raw"),
-          shutter_speed: exif.find { |exif| exif["tag"] =~ /ExposureTime/i }&.fetch("raw"),
-          iso: exif.find { |exif| exif["tag"] =~ /ISO/i }&.fetch("raw"),
+          info: info.to_hash,
+          exif: exif,
           prev: prev_id,
           next: next_id
         }
