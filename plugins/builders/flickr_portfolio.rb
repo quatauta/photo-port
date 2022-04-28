@@ -3,6 +3,15 @@ require "dotenv/load"
 require "flickr"
 
 class Builders::FlickrPortfolio < SiteBuilder
+  CONFIG_DEFAULTS = {
+    flickr_portfolio: {
+      api_key: nil,
+      api_secret: nil,
+      user: nil,
+      api_cache: File.join(".bridgetown-cache", "flickr-api.yml"),
+    }
+  }
+
   PHOTO_CONTENT = <<~EOS
     {% assign make          = resource.data.exif | where: "tag", "Make"                    | map: "raw"   | first | capitalize -%}
     {% assign model         = resource.data.exif | where: "tag", "Model"                   | map: "raw"   | first -%}
@@ -92,11 +101,11 @@ class Builders::FlickrPortfolio < SiteBuilder
   end
 
   def build
-    key = ENV["FLICKR_KEY"]
-    secret = ENV["FLICKR_SECRET"]
-    user = ENV["FLICKR_USER"]
+    key = config["flickr_portfolio"]["api_key"]&.gsub("ENV.FLICKR_API_KEY", ENV["FLICKR_API_KEY"])
+    secret = config["flickr_portfolio"]["api_secret"]&.gsub("ENV.FLICKR_API_SECRET", ENV["FLICKR_API_SECRET"])
+    user = config["flickr_portfolio"]["user_id"]&.gsub("ENV.FLICKR_USER_ID", ENV["FLICKR_USER_ID"])
 
-    Flickr.cache = File.join(site.config["cache_dir"], "flickr-api.yml")
+    Flickr.cache = config["flickr_portfolio"]["api_cache"]
     flickr = ::Flickr.new(key, secret)
     photosets = flickr_photosets(flickr, user)
 
