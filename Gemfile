@@ -19,20 +19,21 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # If you need to upgrade/switch Bridgetown versions, change the line below
 # and then run `bundle update bridgetown`
-gem "bridgetown", "~> 1.0.0"
+gem "bridgetown", ">= 1.0.0"
 
 # Uncomment to add file-based dynamic routing to your project:
-# gem "bridgetown-routes", "~> 1.0.0", group: :bridgetown_plugins
+# gem "bridgetown-routes", ">= 1.0.0", group: :bridgetown_plugins
 
 # Puma is a Rack-compatible server used by Bridgetown
 # (you can optionally limit this to the "development" group)
-gem "puma", "~> 5.6"
+gem "puma", ">= 5.6"
 
-gem "bridgetown-content-security-policy", "~> 1.1", group: :bridgetown_plugins
-gem "bridgetown-haml", "~> 1.1", group: :bridgetown_plugins
+gem "bridgetown-content-security-policy", ">= 1.1", group: :bridgetown_plugins
+gem "bridgetown-haml", ">= 1.1", group: :bridgetown_plugins
 
-gem "bundler-audit", "~> 0.9.0"
-gem "standard", "~> 1.10"
+gem "bundler-audit", ">= 0.9.0"
+gem "libyear-bundler", ">= 0.6.0"
+gem "standard", ">= 1.10"
 
-gem "dotenv", "~> 2.7.0"
-gem "flickr", "~> 2.0.0"
+gem "dotenv", ">= 2.7.0"
+gem "flickr", ">= 2.0.0"

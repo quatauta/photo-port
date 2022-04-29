@@ -1,0 +1,36 @@
+#!/bin/bash
+
+set -e
+
+PROJECT_ROOT="$(realpath "$(dirname "$0")/..")"
+
+echo "[ $0 ] Updating asdf-managed tools"
+while read -r TOOL_NAME ; do
+  asdf install "${TOOL_NAME}" latest
+  # adf seems to have an issue with shellcheck and shfmt. Ignore exit code of `asdf local ...` for now
+  set +e
+  asdf local "${TOOL_NAME}" latest
+  set -e
+done < <(cut -d' ' -f1 "${PROJECT_ROOT}/.tool-versions")
+
+echo "[ $0 ] Updating Ruby gems"
+bundle update --all --quiet
+
+echo "[ $0 ] Updating JavaScript packages"
+yarn upgrade | grep -v -E '^(info (All|Direct) dependencies)|([├└])'
+
+# Turning off exit-on-error because the outdated commands # will usually exit nonzero and
+# we don't want them to abort this script
+set +e
+
+echo "[ $0 ] Printing outdated JavaScript packages"
+yarn outdated
+
+echo "[ $0 ] Printing outdated Ruby gems"
+bundle exec libyear-bundler --all
+
+echo "[ $0 ] If anything is outdated, you may have overly conservative versions pinned in your Gemfile"
+echo "[ $0 ] You should remove these pins if possible and see if the app works with the latest versions"
+
+echo "[ $0 ] Running bin/ci"
+"${PROJECT_ROOT}/bin/ci"

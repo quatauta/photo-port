@@ -8,7 +8,7 @@ class Builders::FlickrPortfolio < SiteBuilder
       api_key: nil,
       api_secret: nil,
       user: nil,
-      api_cache: File.join(".bridgetown-cache", "flickr-api.yml"),
+      api_cache: File.join(".bridgetown-cache", "flickr-api.yml")
     }
   }
 
