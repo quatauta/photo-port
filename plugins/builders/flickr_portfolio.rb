@@ -81,7 +81,6 @@ class Builders::FlickrPortfolio < SiteBuilder
       add_resource :pages, "#{portfolio_slug(set)}.md" do
         layout "flickr_portfolio"
         pagination from: -> { {collection: portfolio_slug(set), per_page: 10, sort_field: "relative_url", sort_reverse: false} }
-        #content ""
       end
 
       photoset_photos = flickr_photoset_photos(flickr, flickr_user_id, set)
@@ -106,7 +105,6 @@ class Builders::FlickrPortfolio < SiteBuilder
 
         add_resource portfolio_slug(set), "#{index + 1}-#{info["title"].parameterize}.md" do
           ___ frontmatter
-          #content ""
         end
       end
     end

@@ -8,7 +8,7 @@ def setup
   # Only do bundle install if the much-faster bundle check indicates we need to
   system! "bundle check || bundle install"
 
-  log "☕️ Installing Node modules"
+  log "☕️ Installing NodeJS modules"
 
   # Only do yarn install if the much-faster yarn check indicates we need to. Note that
   # --check-files is needed to force Yarn to actually examine what's in node_modules

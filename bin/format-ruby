@@ -1,13 +1,13 @@
 #!/bin/bash
+# vim:shiftwidth=2:
 
-bundle check || bundle install
+RUBOCOP_DEFAULT_ARGS=(--format=simple)
+RUBOCOP_ARGS_IF_NONE_GIVEN=(--auto-correct .)
+RUBOCOP_ARGS=("${RUBOCOP_ARGS_IF_NONE_GIVEN[@]}")
 
 if [[ $# -gt 0 ]]; then
-  echo "[ $0 ] Running rubocop ${*}"
-  bundle exec rubocop "${@}"
-  exit $?
-else
-  echo "[ $0 ] Running rubocop --auto-correct ."
-  bundle exec rubocop --format=simple --auto-correct .
-  exit $?
+  RUBOCOP_ARGS=("${@}")
 fi
+
+echo "[ $0 ] Running rubocop ${RUBOCOP_DEFAULT_ARGS[*]} ${RUBOCOP_ARGS[*]}"
+bundle exec rubocop "${RUBOCOP_DEFAULT_ARGS[@]}" "${RUBOCOP_ARGS[@]}"

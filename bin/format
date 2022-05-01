@@ -1,11 +1,14 @@
 #!/bin/bash
+# vim:shiftwidth=2:
+
+PROJECT_ROOT="$(realpath "$(dirname "$0")/..")"
+PRETTIER_DEFAULT_ARGS=(--no-error-on-unmatched-pattern)
+PRETTIER_ARGS_IF_NONE_GIVEN=(--write .)
+PRETTIER_ARGS=("${PRETTIER_ARGS_IF_NONE_GIVEN[@]}")
 
 if [[ $# -gt 0 ]]; then
-  echo "[ $0 ] Running prettier ${*}"
-  ./node_modules/.bin/prettier --no-error-on-unmatched-pattern "${@}"
-  exit $?
-else
-  echo "[ $0 ] Running prettier --write ."
-  ./node_modules/.bin/prettier --no-error-on-unmatched-pattern --write .
-  exit $?
+  PRETTIER_ARGS=("${@}")
 fi
+
+echo "[ $0 ] Running prettier ${PRETTIER_DEFAULT_ARGS[*]} ${PRETTIER_ARGS[*]}"
+"${PROJECT_ROOT}/node_modules/.bin/prettier" "${PRETTIER_DEFAULT_ARGS[@]}" "${PRETTIER_ARGS[@]}"

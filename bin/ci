@@ -18,6 +18,6 @@ echo "[ $0 ] Checking syntax/formatting"
 bin/format --check .
 
 echo "[ $0 ] Checking Ruby syntax/formatting"
-bin/format-ruby --format=simple
+bin/format-ruby .
 
 echo "[ $0 ] Done"
