@@ -2,10 +2,10 @@
 
 set -e
 
-echo "[ bin/deploy ] Cleaning ./output/"
+echo "[ $0 ] Cleaning ./output/"
 rm -rf ./output/
 
-echo "[ bin/deploy ] Running bin/bridgetown deploy"
+echo "[ $0 ] Running bin/bridgetown deploy"
 export BRIDGETOWN_ENV=production
 bin/bridgetown frontend:build
 bin/bridgetown build

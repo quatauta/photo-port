@@ -2,22 +2,22 @@
 
 set -e
 
-echo "[ bin/ci ] Running unit tests"
+echo "[ $0 ] Running unit tests"
 bin/bridgetown test
 
-echo "[ bin/ci ] Checking Shell files syntax"
+echo "[ $0 ] Checking Shell files syntax"
 shfmt -f . | while read -r FILE; do shellcheck "${FILE}"; done
 
-echo "[ bin/ci ] Analyzing Ruby gems for security vulnerabilities"
+echo "[ $0 ] Analyzing Ruby gems for security vulnerabilities"
 bundle exec bundle audit check --update
 
-echo "[ bin/ci ] Analyzing Node modules for security vulnerabilities"
+echo "[ $0 ] Analyzing Node modules for security vulnerabilities"
 yarn audit
 
-echo "[ bin/ci ] Checking syntax/formatting"
+echo "[ $0 ] Checking syntax/formatting"
 bin/format --check .
 
-echo "[ bin/ci ] Checking Ruby syntax/formatting"
+echo "[ $0 ] Checking Ruby syntax/formatting"
 bin/format-ruby --format=simple
 
-echo "[ bin/ci ] Done"
+echo "[ $0 ] Done"

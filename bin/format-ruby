@@ -3,9 +3,11 @@
 bundle check || bundle install
 
 if [[ $# -gt 0 ]]; then
+  echo "[ $0 ] Running rubocop ${*}"
   bundle exec rubocop "${@}"
   exit $?
 else
+  echo "[ $0 ] Running rubocop --auto-correct ."
   bundle exec rubocop --format=simple --auto-correct .
   exit $?
 fi

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Taken from https://docs.netlify.com/configure-builds/file-based-configuration/#inject-environment-variable-values
 
-echo "Updating netlify.toml with references to our built files"
+echo "[ $0 ] Updating netlify.toml with references to our built files"
 
 CSS_PATH=$(find output/_bridgetown/static/css/*.css -type f | sed -e 's,output\/,/,g')
 JS_PATH=$(find output/_bridgetown/static/js/*.js -type f | sed -e 's,output\/,/,g')

@@ -1,9 +1,11 @@
 #!/bin/bash
 
 if [[ $# -gt 0 ]]; then
+  echo "[ $0 ] Running prettier ${*}"
   ./node_modules/.bin/prettier --no-error-on-unmatched-pattern "${@}"
   exit $?
 else
+  echo "[ $0 ] Running prettier --write ."
   ./node_modules/.bin/prettier --no-error-on-unmatched-pattern --write .
   exit $?
 fi

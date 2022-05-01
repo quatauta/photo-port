@@ -2,5 +2,5 @@
 
 set -e
 
-echo "[ bin/run ] Starting bin/bridgetown start"
+echo "[ $0 ] Starting bin/bridgetown start"
 bin/bridgetown start

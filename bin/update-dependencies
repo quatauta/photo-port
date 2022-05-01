@@ -7,11 +7,10 @@ PROJECT_ROOT="$(realpath "$(dirname "$0")/..")"
 echo "[ $0 ] Updating asdf-managed tools"
 while read -r TOOL_NAME ; do
   asdf install "${TOOL_NAME}" latest
-  # adf seems to have an issue with shellcheck and shfmt. Ignore exit code of `asdf local ...` for now
-  set +e
   asdf local "${TOOL_NAME}" latest
-  set -e
 done < <(cut -d' ' -f1 "${PROJECT_ROOT}/.tool-versions")
+
+exit
 
 echo "[ $0 ] Updating Ruby gems"
 bundle update --all --quiet
