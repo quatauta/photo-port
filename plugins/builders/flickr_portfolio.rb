@@ -7,8 +7,8 @@ class Builders::FlickrPortfolio < SiteBuilder
     flickr_portfolio: {
       api_key: nil,
       api_secret: nil,
-      user: nil,
-      api_cache: File.join(".bridgetown-cache", "flickr-api.yml")
+      user_id: nil,
+      api_cache_file: File.join(".bridgetown-cache", "flickr-api.yml")
     }
   }
 
@@ -100,14 +100,23 @@ class Builders::FlickrPortfolio < SiteBuilder
     photoset["title"].sub(/\s*portfolio\s*/i, "").parameterize
   end
 
-  def build
-    key = config["flickr_portfolio"]["api_key"]&.gsub("ENV.FLICKR_API_KEY", ENV["FLICKR_API_KEY"])
-    secret = config["flickr_portfolio"]["api_secret"]&.gsub("ENV.FLICKR_API_SECRET", ENV["FLICKR_API_SECRET"])
-    user = config["flickr_portfolio"]["user_id"]&.gsub("ENV.FLICKR_USER_ID", ENV["FLICKR_USER_ID"])
+  def substitute_environment_variable(text, variable_name)
+    pattern_prefix = '(\A|\W)ENV.'
+    pattern_variable_name = Regexp.quote(variable_name.to_s)
+    pattern_suffix = '(\W|\z)'
+    regex = Regexp.new(pattern_prefix + pattern_variable_name + pattern_suffix)
 
-    Flickr.cache = config["flickr_portfolio"]["api_cache"]
-    flickr = ::Flickr.new(key, secret)
-    photosets = flickr_photosets(flickr, user)
+    text&.gsub(regex, ENV.fetch(variable_name))
+  end
+
+  def build
+    flickr_api_key = substitute_environment_variable(config["flickr_portfolio"]["api_key"], "FLICKR_API_KEY")
+    flickr_api_secret = substitute_environment_variable(config["flickr_portfolio"]["api_secret"], "FLICKR_API_SECRET")
+    flickr_user_id = substitute_environment_variable(config["flickr_portfolio"]["user_id"], "FLICKR_USER_ID")
+    Flickr.cache = config["flickr_portfolio"]["api_cache_file"]
+
+    flickr = ::Flickr.new(flickr_api_key, flickr_api_secret)
+    photosets = flickr_photosets(flickr, flickr_user_id)
 
     photosets.select { |set| set["title"] =~ /portfolio/i }.each do |set|
       add_resource :pages, "#{portfolio_slug(set)}.md" do
@@ -116,7 +125,7 @@ class Builders::FlickrPortfolio < SiteBuilder
         content PORTFOLIO_CONTENT
       end
 
-      photoset_photos = flickr_photoset_photos(flickr, user, set)
+      photoset_photos = flickr_photoset_photos(flickr, flickr_user_id, set)
 
       photoset_photos.each_with_index do |photo, index|
         info = flickr_photo(flickr, photo)
