@@ -10,8 +10,6 @@ while read -r TOOL_NAME ; do
   asdf local "${TOOL_NAME}" latest
 done < <(cut -d' ' -f1 "${PROJECT_ROOT}/.tool-versions")
 
-exit
-
 echo "[ $0 ] Updating Ruby gems"
 bundle update --all --quiet
 
