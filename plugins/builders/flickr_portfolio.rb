@@ -16,8 +16,53 @@ class Builders::FlickrPortfolio < SiteBuilder
     }
   }
 
-  def cache
-    @@cache ||= Bridgetown::Cache.new(self.class.to_s)
+  def build
+    flickr_api_key = substitute_environment_variable(config["flickr_portfolio"]["api_key"], "FLICKR_API_KEY")
+    flickr_api_secret = substitute_environment_variable(config["flickr_portfolio"]["api_secret"], "FLICKR_API_SECRET")
+    flickr_user_id = substitute_environment_variable(config["flickr_portfolio"]["user_id"], "FLICKR_USER_ID")
+    layout_flickr_photo = config["flickr_portfolio"]["layout"]["photo"]
+    layout_flickr_portfolio = config["flickr_portfolio"]["layout"]["portfolio"]
+    Flickr.cache = config["flickr_portfolio"]["api_cache_file"]
+
+    flickr = ::Flickr.new(flickr_api_key, flickr_api_secret)
+
+    flickr_photosets(flickr, flickr_user_id).select { |set| set["title"] =~ /portfolio/i }.each do |set|
+      add_portfolio_resource(set, layout_flickr_portfolio)
+
+      flickr_photoset_photos(flickr, flickr_user_id, set).each_with_index do |photo, index|
+        info = flickr_photo_info(flickr, photo)
+        exif = flickr_photo_exif(flickr, photo)&.to_hash&.fetch("exif", nil)
+        location = flickr_photo_location(flickr, photo)&.to_hash&.fetch("location", nil)
+
+        add_photo_resource(set: set, photo: photo, index: index, info: info, exif: exif, location: location, layout: layout_flickr_photo)
+      end
+    end
+  end
+
+  def add_photo_resource(set:, photo:, index:, info:, exif:, location:, layout:)
+    frontmatter = {
+      layout: layout,
+      portfolio: portfolio_slug(set),
+      title: info["title"],
+      description: info["description"],
+      flickr_id: info["id"],
+      flickr_url: Flickr.url_photopage(info),
+      source: Flickr.url_o(info),
+      info: info&.to_hash,
+      exif: exif,
+      location: location&.to_hash
+    }
+
+    add_resource portfolio_slug(set), "#{index + 1}-#{info["title"].parameterize}.md" do
+      ___ frontmatter
+    end
+  end
+
+  def add_portfolio_resource(set, layout)
+    add_resource :pages, "#{portfolio_slug(set)}.md" do
+      layout layout
+      pagination from: -> { {collection: portfolio_slug(set), per_page: 10, sort_field: "relative_url", sort_reverse: false} }
+    end
   end
 
   def flickr_photosets(flickr, user_id)
@@ -34,7 +79,7 @@ class Builders::FlickrPortfolio < SiteBuilder
     end
   end
 
-  def flickr_photo(flickr, photo)
+  def flickr_photo_info(flickr, photo)
     cache.getset("photo_#{photo["id"]}_info_#{photo["last_update"]}") do
       puts "fetching photo #{photo["id"]} info"
       flickr.photos.getInfo(photo_id: photo["id"], secret: photo["secret"])
@@ -56,6 +101,7 @@ class Builders::FlickrPortfolio < SiteBuilder
       flickr.photos.geo.getLocation(photo_id: photo["id"], secret: photo["secret"])
     rescue
       # getLocation API call with fail with error if location information is not available
+      raise
     end
   end
 
@@ -72,47 +118,9 @@ class Builders::FlickrPortfolio < SiteBuilder
     text&.gsub(regex, ENV.fetch(variable_name))
   end
 
-  def build
-    flickr_api_key = substitute_environment_variable(config["flickr_portfolio"]["api_key"], "FLICKR_API_KEY")
-    flickr_api_secret = substitute_environment_variable(config["flickr_portfolio"]["api_secret"], "FLICKR_API_SECRET")
-    flickr_user_id = substitute_environment_variable(config["flickr_portfolio"]["user_id"], "FLICKR_USER_ID")
-    layout_flickr_photo = config["flickr_portfolio"]["layout"]["photo"]
-    layout_flickr_portfolio = config["flickr_portfolio"]["layout"]["portfolio"]
-    Flickr.cache = config["flickr_portfolio"]["api_cache_file"]
+  private
 
-    flickr = ::Flickr.new(flickr_api_key, flickr_api_secret)
-    photosets = flickr_photosets(flickr, flickr_user_id)
-
-    photosets.select { |set| set["title"] =~ /portfolio/i }.each do |set|
-      add_resource :pages, "#{portfolio_slug(set)}.md" do
-        layout layout_flickr_portfolio
-        pagination from: -> { {collection: portfolio_slug(set), per_page: 10, sort_field: "relative_url", sort_reverse: false} }
-      end
-
-      photoset_photos = flickr_photoset_photos(flickr, flickr_user_id, set)
-
-      photoset_photos.each_with_index do |photo, index|
-        info = flickr_photo(flickr, photo)
-        exif = flickr_photo_exif(flickr, photo)&.to_hash&.fetch("exif", nil)
-        location = flickr_photo_location(flickr, photo)&.to_hash&.fetch("location", nil)
-
-        frontmatter = {
-          layout: layout_flickr_photo,
-          portfolio: portfolio_slug(set),
-          title: info["title"],
-          description: info["description"],
-          flickr_id: info["id"],
-          flickr_url: Flickr.url_photopage(info),
-          source: Flickr.url_o(info),
-          info: info&.to_hash,
-          exif: exif,
-          location: location&.to_hash
-        }
-
-        add_resource portfolio_slug(set), "#{index + 1}-#{info["title"].parameterize}.md" do
-          ___ frontmatter
-        end
-      end
-    end
+  def cache
+    @@cache ||= Bridgetown::Cache.new(self.class.to_s)
   end
 end
