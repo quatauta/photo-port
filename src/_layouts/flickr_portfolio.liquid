@@ -1,0 +1,20 @@
+---
+layout: default
+---
+<h1 class="mx-0 mb-4 text-4xl text-center">{{ page.title }}</h1>
+
+<div class="mx-auto">
+  <div class="grid grid-cols-1 gap-1 lg:grid-cols-2 2xl:grid-cols-3">
+    {% for photo in paginator.resources -%}
+    {%   if photo.data.info.rotation == 90 or photo.data.info.rotation == 270 -%}
+    {%     assign class = "row-span-2" -%}
+    {%   endif -%}
+    {%   render "flickr_portfolio_thumbnail",
+                source:    photo.data.source,
+                portfolio_url: resource.relative_url,
+                id:        photo.data.slug,
+                title:     photo.data.title,
+                class:     class -%}
+    {% endfor -%}
+  </div>
+</div>

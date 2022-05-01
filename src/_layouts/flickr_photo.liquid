@@ -1,0 +1,34 @@
+---
+layout: default
+---
+{% assign make          = resource.data.exif | where: "tag", "Make"                    | map: "raw"   | first -%}
+{% assign model         = resource.data.exif | where: "tag", "Model"                   | map: "raw"   | first -%}
+{% assign aperture      = resource.data.exif | where: "tag", "FNumber"                 | map: "clean" | first -%}
+{% assign focal_length  = resource.data.exif | where: "tag", "FocalLengthIn35mmFormat" | map: "raw"   | first -%}
+{% assign shutter_speed = resource.data.exif | where: "tag", "ExposureTime"            | map: "raw"   | first -%}
+{% assign iso           = resource.data.exif | where: "tag", "ISO"                     | map: "raw"   | first -%}
+
+<h1 class="mx-0 mb-4 text-4xl text-center">{{ page.title }}</h1>
+
+{% assign description_size = resource.data.description | size -%}
+{% if description_size > 0 -%}
+<div class="text-center mb-4">
+  {{ resource.data.description }}
+</div>
+{% endif -%}
+
+{% render "flickr_photo",
+          id:            resource.data.slug,
+          flickr_url:    resource.data.flickr_url,
+          source:        resource.data.source,
+          title:         resource.data.title,
+          description:   resource.data.description,
+          portfolio:     resource.data.portfolio,
+          make:          make,
+          model:         model,
+          aperture:      aperture,
+          focal_length:  focal_length,
+          shutter_speed: shutter_speed,
+          iso:           iso,
+          prev_url:      resource.previous.relative_url,
+          next_url:      resource.next.relative_url -%}
