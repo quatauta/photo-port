@@ -5,10 +5,14 @@ require "flickr"
 class Builders::FlickrPortfolio < SiteBuilder
   CONFIG_DEFAULTS = {
     flickr_portfolio: {
+      api_cache_file: File.join(".bridgetown-cache", "flickr-api.yml"),
       api_key: nil,
       api_secret: nil,
       user_id: nil,
-      api_cache_file: File.join(".bridgetown-cache", "flickr-api.yml")
+      layout: {
+        photo: "flickr_photo",
+        portfolio: "flickr_portfolio"
+      }
     }
   }
 
@@ -72,6 +76,8 @@ class Builders::FlickrPortfolio < SiteBuilder
     flickr_api_key = substitute_environment_variable(config["flickr_portfolio"]["api_key"], "FLICKR_API_KEY")
     flickr_api_secret = substitute_environment_variable(config["flickr_portfolio"]["api_secret"], "FLICKR_API_SECRET")
     flickr_user_id = substitute_environment_variable(config["flickr_portfolio"]["user_id"], "FLICKR_USER_ID")
+    layout_flickr_photo = config["flickr_portfolio"]["layout"]["photo"]
+    layout_flickr_portfolio = config["flickr_portfolio"]["layout"]["portfolio"]
     Flickr.cache = config["flickr_portfolio"]["api_cache_file"]
 
     flickr = ::Flickr.new(flickr_api_key, flickr_api_secret)
@@ -79,7 +85,7 @@ class Builders::FlickrPortfolio < SiteBuilder
 
     photosets.select { |set| set["title"] =~ /portfolio/i }.each do |set|
       add_resource :pages, "#{portfolio_slug(set)}.md" do
-        layout "flickr_portfolio"
+        layout layout_flickr_portfolio
         pagination from: -> { {collection: portfolio_slug(set), per_page: 10, sort_field: "relative_url", sort_reverse: false} }
       end
 
@@ -91,7 +97,7 @@ class Builders::FlickrPortfolio < SiteBuilder
         location = flickr_photo_location(flickr, photo)&.to_hash&.fetch("location", nil)
 
         frontmatter = {
-          layout: "flickr_photo",
+          layout: layout_flickr_photo,
           portfolio: portfolio_slug(set),
           title: info["title"],
           description: info["description"],
