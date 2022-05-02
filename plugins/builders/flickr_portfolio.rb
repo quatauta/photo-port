@@ -6,9 +6,6 @@ class Builders::FlickrPortfolio < SiteBuilder
   CONFIG_DEFAULTS = {
     flickr_portfolio: {
       api_cache_file: File.join(".bridgetown-cache", "flickr-api.yml"),
-      api_key: nil,
-      api_secret: nil,
-      user_id: nil,
       layout: {
         photo: "flickr_photo",
         portfolio: "flickr_portfolio"
