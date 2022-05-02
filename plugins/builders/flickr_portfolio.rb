@@ -71,28 +71,28 @@ class Builders::FlickrPortfolio < SiteBuilder
 
   def flickr_photosets(flickr, user_id)
     cache.getset("user_#{user_id}_photosets_#{Date.today}") do
-      puts "fetching #{user_id} photoset list"
+      log("fetching #{user_id} photoset list")
       flickr.photosets.getList(user_id: user_id)["photoset"]
     end
   end
 
   def flickr_photoset_photos(flickr, user_id, photoset)
     cache.getset("photoset_#{photoset["id"]}_photos_#{photoset["date_update"]}") do
-      puts "fetching #{user_id} photoset #{photoset["id"]} photo list"
+      log("fetching #{user_id} photoset #{photoset["id"]} photo list")
       flickr.photosets.getPhotos(user_id: user_id, photoset_id: photoset["id"], media: :photos, extras: "last_update")["photo"]
     end
   end
 
   def flickr_photo_info(flickr, photo)
     cache.getset("photo_#{photo["id"]}_info_#{photo["last_update"]}") do
-      puts "fetching photo #{photo["id"]} info"
+      log("fetching photo #{photo["id"]} info")
       flickr.photos.getInfo(photo_id: photo["id"], secret: photo["secret"])
     end
   end
 
   def flickr_photo_exif(flickr, photo)
     cache.getset("photo_#{photo["id"]}_exif_#{photo["last_update"]}") do
-      puts "fetching photo #{photo["id"]} exif"
+      log("fetching photo #{photo["id"]} exif")
       flickr.photos.getExif(photo_id: photo["id"], secret: photo["secret"])
     rescue Flickr::FailedResponse => error
       raise unless /getExif.*Photo has no exif information/i.match?(error.message)
@@ -101,7 +101,7 @@ class Builders::FlickrPortfolio < SiteBuilder
 
   def flickr_photo_location(flickr, photo)
     cache.getset("photo_#{photo["id"]}_location_#{photo["last_update"]}") do
-      puts "fetching photo #{photo["id"]} location"
+      log("fetching photo #{photo["id"]} location")
       flickr.photos.geo.getLocation(photo_id: photo["id"], secret: photo["secret"])
     rescue Flickr::FailedResponse => error
       raise unless /getLocation.*Photo has no location information/i.match?(error.message)
@@ -113,6 +113,10 @@ class Builders::FlickrPortfolio < SiteBuilder
   end
 
   private
+
+  def log(message)
+    Bridgetown.logger.info("#{self.class}:", message)
+  end
 
   def cache
     @@cache ||= Bridgetown::Cache.new(self.class.to_s)

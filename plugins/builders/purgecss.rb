@@ -17,14 +17,14 @@ class Builders::Purgecss < SiteBuilder
           manifest = JSON.parse(File.read(manifest_file))
           css_file = manifest["styles/index.css"].split("/").last
           css_path = ["output", "_bridgetown", "static", css_file].join("/")
-          Bridgetown.logger.info "PurgeCSS", "Purging #{css_file}"
+          Bridgetown.logger.info "PurgeCSS:", "Purging #{css_file}"
           oldsize = File.stat(css_path).size / 1000
           system "./node_modules/.bin/purgecss -c purgecss.config.js -css #{css_path}"
           newsize = File.stat(css_path).size / 1000
           if newsize < oldsize
-            Bridgetown.logger.info "PurgeCSS", "Done! File size reduced from #{oldsize}kB to #{newsize}kB"
+            Bridgetown.logger.info "PurgeCSS:", "Done! File size reduced from #{oldsize}kB to #{newsize}kB"
           else
-            Bridgetown.logger.info "PurgeCSS", "Done. No apparent change in file size (#{newsize}kB)."
+            Bridgetown.logger.info "PurgeCSS:", "Done. No apparent change in file size (#{newsize}kB)."
           end
         end
       end
