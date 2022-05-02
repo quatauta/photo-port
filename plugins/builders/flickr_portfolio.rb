@@ -64,7 +64,7 @@ class Builders::FlickrPortfolio < SiteBuilder
     frontmatter = {
       layout: layout,
       portfolio: portfolio_slug(set),
-      pagination: { collection: portfolio_slug(set), per_page: 10, sort_field: "relative_url", sort_reverse: false}
+      pagination: {collection: portfolio_slug(set), per_page: 10, sort_field: "relative_url", sort_reverse: false}
     }
 
     add_resource "pages", "#{portfolio_slug(set)}.md" do
