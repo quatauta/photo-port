@@ -1,6 +1,6 @@
 [*.sh]
 indent_style = space
-indent_size = 
+indent_size = 2
 
 [node_modules/**]
 ignore = true
