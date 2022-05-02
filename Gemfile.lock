@@ -95,7 +95,7 @@ GEM
       rexml
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
-    libyear-bundler (0.6.0)
+    libyear-bundler (0.6.1)
       bundler (>= 1.14, < 3)
     liquid (5.3.0)
     listen (3.7.1)
