@@ -31,9 +31,6 @@ pagination:
   enabled: true
 
 flickr_portfolio:
-  api_key: ENV.FLICKR_API_KEY
-  api_secret: ENV.FLICKR_API_SECRET
-  user_id: ENV.FLICKR_USER_ID
   layout:
     photo: flickr_photo
     portfolio: flickr_portfolio

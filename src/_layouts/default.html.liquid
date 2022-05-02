@@ -4,7 +4,8 @@
     {% render "head", metadata: site.metadata, title: page.title %}
   </head>
   <body class="text-slate-900 dark:text-slate-100  bg-slate-100 tabular-nums dark:bg-slate-900  mx-2 my-0 font-sans leading-normal {{ resource.data.layout }} {{ resource.data.page_class }}">
-    {% render "navbar", metadata: site.metadata, resource: resource %}
+    {% assign portfolios = site.resources | map: "portfolio" | compact | sort | uniq -%}
+    {% render "navbar", metadata: site.metadata, resource: resource, portfolios: portfolios -%}
 
     <main class="p-4 m-4 mx-auto mb-4 max-w-screen-2xl bg-white rounded-xl shadow-lg dark:bg-black dark:shadow-white/20">
       {{ content }}

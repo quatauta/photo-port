@@ -17,24 +17,26 @@ class Builders::FlickrPortfolio < SiteBuilder
   }
 
   def build
-    flickr_api_key = substitute_environment_variable(config["flickr_portfolio"]["api_key"], "FLICKR_API_KEY")
-    flickr_api_secret = substitute_environment_variable(config["flickr_portfolio"]["api_secret"], "FLICKR_API_SECRET")
-    flickr_user_id = substitute_environment_variable(config["flickr_portfolio"]["user_id"], "FLICKR_USER_ID")
-    layout_flickr_photo = config["flickr_portfolio"]["layout"]["photo"]
-    layout_flickr_portfolio = config["flickr_portfolio"]["layout"]["portfolio"]
-    Flickr.cache = config["flickr_portfolio"]["api_cache_file"]
+    hook :site, :post_read do
+      flickr_api_key = ENV.fetch("FLICKR_API_KEY")
+      flickr_api_secret = ENV.fetch("FLICKR_API_SECRET")
+      flickr_user_id = site.metadata.flickr_user_id
+      layout_flickr_photo = config["flickr_portfolio"]["layout"]["photo"]
+      layout_flickr_portfolio = config["flickr_portfolio"]["layout"]["portfolio"]
+      Flickr.cache = config["flickr_portfolio"]["api_cache_file"]
 
-    flickr = ::Flickr.new(flickr_api_key, flickr_api_secret)
+      flickr = ::Flickr.new(flickr_api_key, flickr_api_secret)
 
-    flickr_photosets(flickr, flickr_user_id).select { |set| set["title"] =~ /portfolio/i }.each do |set|
-      add_portfolio_resource(set, layout_flickr_portfolio)
+      flickr_photosets(flickr, flickr_user_id).select { |set| set["title"] =~ /portfolio/i }.each do |set|
+        add_portfolio_resource(set, layout_flickr_portfolio)
 
-      flickr_photoset_photos(flickr, flickr_user_id, set).each_with_index do |photo, index|
-        info = flickr_photo_info(flickr, photo)
-        exif = flickr_photo_exif(flickr, photo)&.to_hash&.fetch("exif", nil)
-        location = flickr_photo_location(flickr, photo)&.to_hash&.fetch("location", nil)
+        flickr_photoset_photos(flickr, flickr_user_id, set).each_with_index do |photo, index|
+          info = flickr_photo_info(flickr, photo)
+          exif = flickr_photo_exif(flickr, photo)&.to_hash&.fetch("exif", nil)
+          location = flickr_photo_location(flickr, photo)&.to_hash&.fetch("location", nil)
 
-        add_photo_resource(set: set, photo: photo, index: index, info: info, exif: exif, location: location, layout: layout_flickr_photo)
+          add_photo_resource(set: set, photo: photo, index: index, info: info, exif: exif, location: location, layout: layout_flickr_photo)
+        end
       end
     end
   end
@@ -59,9 +61,14 @@ class Builders::FlickrPortfolio < SiteBuilder
   end
 
   def add_portfolio_resource(set, layout)
-    add_resource :pages, "#{portfolio_slug(set)}.md" do
-      layout layout
-      pagination from: -> { {collection: portfolio_slug(set), per_page: 10, sort_field: "relative_url", sort_reverse: false} }
+    frontmatter = {
+      layout: layout,
+      portfolio: portfolio_slug(set),
+      pagination: { collection: portfolio_slug(set), per_page: 10, sort_field: "relative_url", sort_reverse: false}
+    }
+
+    add_resource "pages", "#{portfolio_slug(set)}.md" do
+      ___ frontmatter
     end
   end
 
@@ -90,8 +97,8 @@ class Builders::FlickrPortfolio < SiteBuilder
     cache.getset("photo_#{photo["id"]}_exif_#{photo["last_update"]}") do
       puts "fetching photo #{photo["id"]} exif"
       flickr.photos.getExif(photo_id: photo["id"], secret: photo["secret"])
-    rescue
-      # getExif API call with fail with error if exif information is not available
+    rescue Flickr::FailedResponse => error
+      raise unless /getExif.*Photo has no exif information/i.match?(error.message)
     end
   end
 
@@ -99,23 +106,13 @@ class Builders::FlickrPortfolio < SiteBuilder
     cache.getset("photo_#{photo["id"]}_location_#{photo["last_update"]}") do
       puts "fetching photo #{photo["id"]} location"
       flickr.photos.geo.getLocation(photo_id: photo["id"], secret: photo["secret"])
-    rescue
-      # getLocation API call with fail with error if location information is not available
-      raise
+    rescue Flickr::FailedResponse => error
+      raise unless /getLocation.*Photo has no location information/i.match?(error.message)
     end
   end
 
   def portfolio_slug(photoset)
     photoset["title"].sub(/\s*portfolio\s*/i, "").parameterize
-  end
-
-  def substitute_environment_variable(text, variable_name)
-    pattern_prefix = '(\A|\W)ENV.'
-    pattern_variable_name = Regexp.quote(variable_name.to_s)
-    pattern_suffix = '(\W|\z)'
-    regex = Regexp.new(pattern_prefix + pattern_variable_name + pattern_suffix)
-
-    text&.gsub(regex, ENV.fetch(variable_name))
   end
 
   private
