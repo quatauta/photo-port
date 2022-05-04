@@ -60,7 +60,7 @@ end
 # It's helpful to know what messages came from this script, so we'll use log instead of
 # puts to communicate with the user
 def log(message)
-  puts "[ $0 ] #{message}"
+  puts "[ #{$PROGRAM_NAME} ] #{message}"
 end
 
 # end of helpers

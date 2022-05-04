@@ -10,11 +10,11 @@ layout: default
     {%     assign class = "row-span-2" -%}
     {%   endif -%}
     {%   render "flickr_portfolio_thumbnail",
-                source:    photo.data.source,
+                source:        photo.data.source,
                 portfolio_url: resource.relative_url,
-                id:        photo.data.slug,
-                title:     photo.data.title,
-                class:     class -%}
+                id:            photo.data.slug,
+                title:         photo.data.title,
+                class:         class -%}
     {% endfor -%}
   </div>
 </div>
