@@ -29,7 +29,7 @@ gem "bridgetown", ">= 1.0.0"
 gem "puma", ">= 5.6"
 
 gem "bridgetown-content-security-policy", ">= 1.1", group: :bridgetown_plugins
-gem "bridgetown-haml", ">= 1.1", group: :bridgetown_plugins
+gem "bridgetown-seo-tag", "~> 5.0", group: :bridgetown_plugins
 
 gem "bundler-audit", ">= 0.9.0"
 gem "libyear-bundler", ">= 0.6.0"
