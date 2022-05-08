@@ -1,8 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
 echo "[ $0 ] Running unit tests"
+export BRIDGETOWN_ENV=test
+bin/bridgetown frontend:build
 bin/bridgetown test
 
 echo "[ $0 ] Checking Shell files syntax"

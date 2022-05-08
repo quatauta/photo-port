@@ -36,4 +36,4 @@ yarn-debug.log*
 
 frontend/styles/jit-refresh.css
 .env
-src/_data/flickr
+.asdf

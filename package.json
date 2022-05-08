@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "esbuild": "node esbuild.config.js --minify",
-    "esbuild-dev": "node esbuild.config.js --watch"
+    "esbuild": "touch frontend/styles/jit-refresh.css ; node esbuild.config.js --minify",
+    "esbuild-dev": "touch frontend/styles/jit-refresh.css ; node esbuild.config.js --watch"
   },
   "devDependencies": {
     "cssnano": "^5.1.5",

@@ -3,7 +3,23 @@
 require "pathname"
 
 def setup
+  log "Installing required tools with asdf"
+
+  File.readlines(".tool-versions").map { |line| line.split.first }.each do |tool|
+    system! "asdf plugin list | grep -q '#{tool}' || asdf plugin add '#{tool}'"
+  end
+
+  nproc = `nproc`.strip.split.first.to_i
+
+  system! "asdf plugin update --all"
+  system! "MAKE_OPTS=\"-j#{nproc}\" asdf install"
+
   log "💎 Installing gems"
+
+  if ENV["CI"] == "true"
+    system! "bundle config set --local path vendor"
+    system! "bundle config set --local jobs #{nproc}"
+  end
 
   # Only do bundle install if the much-faster bundle check indicates we need to
   system! "bundle check || bundle install"

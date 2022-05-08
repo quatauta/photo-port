@@ -1,7 +1,7 @@
 #!/bin/bash
 # vim:shiftwidth=2:
 
-RUBOCOP_DEFAULT_ARGS=(--format=simple)
+RUBOCOP_DEFAULT_ARGS=(--format=simple --force-exclusion -c .rubocop.yml)
 RUBOCOP_ARGS_IF_NONE_GIVEN=(--auto-correct .)
 RUBOCOP_ARGS=("${RUBOCOP_ARGS_IF_NONE_GIVEN[@]}")
 

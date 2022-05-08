@@ -1,6 +1,7 @@
 # .prettierignore
 
 .DS_Store
+.asdf
 .bridgetown-cache
 .env*
 .git
@@ -10,3 +11,4 @@ jit-refresh.css
 node_modules
 output
 plugins
+vendor
