@@ -5,6 +5,7 @@ variables:
   ASDF_DATA_DIR: "${CI_PROJECT_DIR}/.asdf"
   ASDF_VERSION: "0.10.0"
   BUNDLE_APP_CONFIG: "${CI_PROJECT_DIR}/.bundle"
+  GEM_HOME: "${CI_PROJECT_DIR}/.gem"
 
 cache:
   - key:
@@ -12,9 +13,10 @@ cache:
       files:
         - Gemfile.lock
     paths:
+      - .gem
       - vendor
   - key:
-      prefix: node
+      prefix: node_modules
       files:
         - yarn.lock
     paths:
@@ -23,6 +25,7 @@ cache:
       prefix: asdf
       files:
         - .tool-versions
+    when: "always"
     paths:
       - .asdf
   - key: default
@@ -30,24 +33,16 @@ cache:
       - .bridgetown-cache
       - .bundle
 
-before_script:
-  - source .gitlab/ci.sh
-  - ci_section asdf ./.gitlab/asdf.sh && source .asdf/asdf.sh
-
-setup:
-  stage: build
-  script:
-    - ci_section setup ./bin/setup
-
 test:
   stage: test
-  needs:
-    - job: setup
-      artifacts: true
   script:
+    - source .gitlab/ci.sh
+    - ci_section asdf ./.gitlab/asdf.sh && source .asdf/asdf.sh
+    - ci_section setup ./bin/setup
     - |
       ci_start tool-versions
-      echo ".tool-versions" && cat .tool-versions
+      echo "versions from .tool-versions:" && cat .tool-versions
+      echo "runtime versions:"
       echo "node" $(node --version)
       echo "yarn" $(yarn --version)
       ruby --version
