@@ -7,12 +7,28 @@ variables:
   BUNDLE_APP_CONFIG: "${CI_PROJECT_DIR}/.bundle"
 
 cache:
-  paths:
-    - .asdf
-    - .bridgetown-cache
-    - .bundle
-    - node_modules
-    - vendor
+  - key:
+      prefix: rubygems
+      files:
+        - Gemfile.lock
+    paths:
+      - vendor
+  - key:
+      prefix: node
+      files:
+        - yarn.lock
+    paths:
+      - node_modules
+  - key:
+      prefix: asdf
+      files:
+        - .tool-versions
+    paths:
+      - .asdf
+  - key: default
+    paths:
+      - .bridgetown-cache
+      - .bundle
 
 before_script:
   - source .gitlab/ci.sh
