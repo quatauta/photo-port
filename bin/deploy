@@ -12,8 +12,7 @@ export BRIDGETOWN_ENV=production
 # shellcheck disable=SC2155
 export GIT_SHA="$(git rev-parse HEAD)"
 export HONEYBADGER_ENV="${BRIDGETOWN_ENV}"
-# shellcheck disable=SC2155
-export REPOSITORY="$(git remote get-url origin | sed -e 's/\.git$//' -e 's_git@gitlab.com:_https://gitlab.com/_')"
+export REPOSITORY="https://gitlab.com/quatauta/photo-port"
 
 if [[ "${RENDER}" == "true" ]] ; then
   [[ "${IS_PULL_REQUEST}" == "true" ]] && HONEYBADGER_ENV="pull-request-preview"
@@ -30,5 +29,5 @@ bin/bridgetown frontend:build
 bin/bridgetown build
 
 if [[ "${RENDER}" == "true" ]] ; then
-  bundle exec honeybadger deploy --repository "${REPOSITORY}" --revision "${GIT_SHA}"
+  bundle exec honeybadger deploy --repository "${REPOSITORY}" --revision "${GIT_SHA}" --user render.com
 fi
