@@ -1,5 +1,11 @@
 import "index.css";
 import * as Turbo from "@hotwired/turbo";
+import * as Honeybader from "@honeybadger-io/js";
+Honeybadger.configure({
+  apiKey: "HONEYBADGER_API_KEY",
+  environment: "HONEYBADGER_ENV",
+  revision: "GIT_SHA",
+});
 
 // Uncomment the line below to add transition animations when Turbo navigates.
 // We recommend adding <meta name="turbo-cache-control" content="no-preview" />

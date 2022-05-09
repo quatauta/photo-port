@@ -37,3 +37,4 @@ gem "standard", ">= 1.10"
 
 gem "dotenv", ">= 2.7.0"
 gem "flickr", ">= 2.0.0"
+gem "honeybadger", ">= 4.12"

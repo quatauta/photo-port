@@ -1,8 +1,9 @@
+previewsEnabled: true
 services:
   - type: web
     name: photo-port
     env: static
-    buildCommand: bin/bridgetown deploy
+    buildCommand: bin/deploy
     staticPublishPath: ./output
     pullRequestPreviewsEnabled: true
     envVars:

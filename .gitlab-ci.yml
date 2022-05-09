@@ -50,4 +50,3 @@ test:
       bundler --version ; bundler config
       ci_end tool-versions
     - ci_section ci ./bin/ci
-    - ci_section deploy ./bin/deploy

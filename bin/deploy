@@ -1,4 +1,5 @@
 #!/bin/bash
+# vim:shiftwidth=2:
 
 set -e
 
@@ -6,6 +7,28 @@ echo "[ $0 ] Cleaning ./output/"
 rm -rf ./output/
 
 echo "[ $0 ] Running bin/bridgetown deploy"
+
 export BRIDGETOWN_ENV=production
+# shellcheck disable=SC2155
+export GIT_SHA="$(git rev-parse HEAD)"
+export HONEYBADGER_ENV="${BRIDGETOWN_ENV}"
+# shellcheck disable=SC2155
+export REPOSITORY="$(git remote get-url origin | sed -e 's/\.git$//' -e 's_git@gitlab.com:_https://gitlab.com/_')"
+
+if [[ "${RENDER}" == "true" ]] ; then
+  [[ "${IS_PULL_REQUEST}" == "true" ]] && HONEYBADGER_ENV="pull-request-preview"
+
+  # shellcheck disable=SC2034,SC2043
+  for FILENAME in frontend/javascript/index.js ; do
+    for VARIABLE_NAME in HONEYBADGER_API_KEY HONEYBADGER_ENV GIT_SHA ; do
+      echo sed -e "s/${VARIABLE_NAME}/${!VARIABLE_NAME}/g" frontend/javascript/index.js
+    done
+  done
+fi
+
 bin/bridgetown frontend:build
 bin/bridgetown build
+
+if [[ "${RENDER}" == "true" ]] ; then
+  bundle exec honeybadger deploy --repository "${REPOSITORY}" --revision "${GIT_SHA}"
+fi
