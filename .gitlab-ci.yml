@@ -23,6 +23,7 @@ test:
   script:
     - source .gitlab/ci.sh
     - ci_section asdf ./.gitlab/asdf.sh && source .asdf/asdf.sh
+    - asdf local ruby system
     - ci_section setup ./bin/setup
     - |
       ci_start tool-versions
