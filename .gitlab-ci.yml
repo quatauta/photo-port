@@ -8,30 +8,15 @@ variables:
   GEM_HOME: "${CI_PROJECT_DIR}/.gem"
 
 cache:
-  - key:
-      prefix: rubygems
-      files:
-        - Gemfile.lock
-    paths:
-      - .gem
-      - vendor
-  - key:
-      prefix: node_modules
-      files:
-        - yarn.lock
-    paths:
-      - node_modules
-  - key:
-      prefix: asdf
-      files:
-        - .tool-versions
+  - key: default
     when: "always"
     paths:
       - .asdf
-  - key: default
-    paths:
       - .bridgetown-cache
       - .bundle
+      - .gem
+      - vendor
+      - node_modules
 
 test:
   stage: test
