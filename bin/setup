@@ -11,6 +11,7 @@ def setup
 
   nproc = `nproc`.strip.split.first.to_i * 2
 
+  system! "asdf local ruby system" if ENV["CI"] == "true"
   system! "asdf plugin update --all"
   system! "MAKE_OPTS=\"-j#{nproc}\" asdf install"
 
