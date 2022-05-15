@@ -14,8 +14,6 @@ module.exports = {
         "custom-media-queries": true,
       },
     },
-    cssnano: {
-      preset: "default",
-    },
+    cssnano: { preset: "default" },
   },
 };
