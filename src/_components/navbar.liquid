@@ -3,7 +3,7 @@
     <a class="no-underline" href="{{ '/' | relative_url }}">
       <picture class="inline-block w-52 max-w-full lg:w-80" alt="{{ metadata.title | escape }}">
         <source srcset="{{ '/images/logo-dark.svg' | relative_url }}" media="(prefers-color-scheme: dark)" >
-        <img src="{{ '/images/logo.svg' | relative_url }}">
+        <img alt="Logo {{ metadata.title }}" src="{{ '/images/logo.svg' | relative_url }}">
       </picture>
     </a>
   </header>
