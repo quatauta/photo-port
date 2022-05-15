@@ -9,6 +9,12 @@ services:
     envVars:
       - key: BRIDGETOWN_ENV
         value: production
+      - key: FLICKR_API_KEY
+        sync: false
+      - key: FLICKR_API_SECRET
+        sync: false
+      - key: HONEYBADGER_API_KEY
+        sync: false
     headers:
       - path: /*
         name: X-Frame-Options
