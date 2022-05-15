@@ -1,3 +1,18 @@
+{% assign img_source = "" -%}
+{% assign img_srcset = "" -%}
+{% assign largest_size = "" -%}
+{% for size in sizes -%}
+{%   if size.width <= 1600 -%}
+{%     assign img_srcset = img_srcset | append: size.source | append: " " | append: size.width | append: "w, " -%}
+{%     assign img_size_screen = size.width | plus: 48 -%}
+{%   endif -%}
+{%   if size.width <= 1600 -%}
+{%     assign largest_size = size.width | append: "px" -%}
+{%   endif -%}
+{%   if size.width <= 200 -%}
+{%      assign img_source = size.source -%}
+{%   endif %}
+{% endfor -%}
 <div class="relative text-lg lg:text-2xl">
   {% if prev_url -%}
   <a href="{{ prev_url }}">
@@ -19,8 +34,7 @@
     </div>
   </a>
 </div>
-<img src="{{ source }}" id="{{ id }}" alt="{{ title }}" referrerpolicy="no-referrer" class="w-full h-full rounded-lg">
-
+<img src="{{ img_source }}" id="{{ id }}" alt="{{ title }}" srcset="{{ img_srcset }}" sizes="(max-width: 1552px) calc(100vw - 1rem), 1552px" referrerpolicy="no-referrer" class="w-full h-full rounded-lg">
 <div class="mx-auto">
   <div class="flex place-content-center	gap-4">
     {% if shutter_speed %}<div class="flex-initial">{{ shutter_speed }} sec</div>{% endif %}

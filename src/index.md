@@ -17,6 +17,7 @@ layout: default
               portfolio_url: portfolio_url,
               id:            photo.data.slug,
               title:         photo.data.title,
+              sizes:         photo.data.sizes,
               class:         class -%}
 {%   endfor -%}
 {% endfor -%}

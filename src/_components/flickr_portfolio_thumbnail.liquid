@@ -1,5 +1,16 @@
+{% assign img_srcset = "" -%}
+{% assign img_source = "" -%}
+{% for size in sizes -%}
+{%   if size.width <= 1536 -%}
+{%     assign img_srcset = img_srcset | append: size.source | append: " " | append: size.width | append: "w, " -%}
+{%   endif -%}
+{%   if size.width <= 400 -%}
+{%      assign img_source = size.source -%}
+{%   endif %}
+{% endfor -%}
 <div class="p-2 transition-all {{ class }}">
   <a href="{{ portfolio_url }}{{ id }}">
-    <img src="{{ source }}" alt="{{ title }}" id="{{ id }}" referrerpolicy="no-referrer" class="block object-cover object-center w-full h-full rounded-lg">
+    <img src="{{ img_source }}" alt="{{ title }}" id="{{ id }}" srcset="{{ img_srcset }}" referrerpolicy="no-referrer" class="block object-cover object-center w-full h-full rounded-lg"
+         sizes="(max-width: 1023px) calc(100vw - 64px), (max-width: 1535px) calc(50vw - 42px), 483px">
   </a>
 </div>

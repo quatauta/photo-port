@@ -31,14 +31,15 @@ class Builders::FlickrPortfolio < SiteBuilder
           info = flickr_photo_info(flickr, photo)
           exif = flickr_photo_exif(flickr, photo)&.to_hash&.fetch("exif", nil)
           location = flickr_photo_location(flickr, photo)&.to_hash&.fetch("location", nil)
+          sizes = flickr_photo_sizes(flickr, photo)&.to_hash&.fetch("size", nil)&.map { |s| s&.to_hash }
 
-          add_photo_resource(set: set, photo: photo, index: index, info: info, exif: exif, location: location, layout: layout_flickr_photo)
+          add_photo_resource(set: set, photo: photo, index: index, info: info, exif: exif, location: location, sizes: sizes, layout: layout_flickr_photo)
         end
       end
     end
   end
 
-  def add_photo_resource(set:, photo:, index:, info:, exif:, location:, layout:)
+  def add_photo_resource(set:, photo:, index:, info:, exif:, location:, sizes:, layout:)
     frontmatter = {
       layout: layout,
       portfolio: portfolio_slug(set),
@@ -49,7 +50,8 @@ class Builders::FlickrPortfolio < SiteBuilder
       source: Flickr.url_o(info),
       info: info&.to_hash,
       exif: exif,
-      location: location&.to_hash
+      location: location&.to_hash,
+      sizes: sizes
     }
 
     add_resource portfolio_slug(set), "#{index + 1}-#{info["title"].parameterize}.md" do
@@ -105,6 +107,15 @@ class Builders::FlickrPortfolio < SiteBuilder
       flickr.photos.geo.getLocation(photo_id: photo["id"], secret: photo["secret"])
     rescue Flickr::FailedResponse => error
       raise unless /getLocation.*Photo has no location information/i.match?(error.message)
+    end
+  end
+
+  def flickr_photo_sizes(flickr, photo)
+    cache.getset("photo_#{photo["id"]}_sizes_#{photo["last_update"]}") do
+      log("fetching photo #{photo["id"]} sizes")
+      flickr.photos.getSizes(photo_id: photo["id"])
+    rescue Flickr::FailedResponse => error
+      raise unless /getLocation.*Photo has no size information/i.match?(error.message)
     end
   end
 
