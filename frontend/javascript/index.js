@@ -1,6 +1,6 @@
 import "index.css";
 import * as Turbo from "@hotwired/turbo";
-import * as Honeybader from "@honeybadger-io/js";
+import * as Honeybadger from "@honeybadger-io/js";
 Honeybadger.configure({
   apiKey: "HONEYBADGER_API_KEY",
   environment: "HONEYBADGER_ENV",
