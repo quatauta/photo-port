@@ -29,6 +29,7 @@ template_engine: liquid
 timezone: Europe/Luxembourg
 pagination:
   enabled: true
+cache_dir: .cache/bridgetown-cache
 
 flickr_portfolio:
   layout:

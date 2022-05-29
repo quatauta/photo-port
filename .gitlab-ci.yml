@@ -14,12 +14,14 @@ cache:
       - .asdf
       - .bridgetown-cache
       - .bundle
+      - .cache
       - .gem
       - vendor
       - node_modules
 
 test:
   stage: test
+  interruptible: true
   script:
     - source .gitlab/ci.sh
     - ci_section asdf ./.gitlab/asdf.sh && source .asdf/asdf.sh
