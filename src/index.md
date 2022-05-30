@@ -6,8 +6,8 @@ layout: default
   <div class="grid grid-cols-1 gap-1 lg:grid-cols-2 2xl:grid-cols-3">
 {% assign portfolios = site.resources | map: "portfolio" | compact | sort | uniq -%}
 {% for portfolio in portfolios -%}
-{%   assign photos = site.resources | where: "portfolio", portfolio | reverse -%}
-{%   for photo in photos limit:2 -%}
+{%   assign photos = site.resources | where: "portfolio", portfolio -%}
+{%   for photo in photos limit:3 -%}
 {%     if photo.data.info.rotation == 90 or photo.data.info.rotation == 270 -%}
 {%       assign class = "row-span-2" -%}
 {%     endif -%}

@@ -63,7 +63,7 @@ class Builders::FlickrPortfolio < SiteBuilder
     frontmatter = {
       layout: layout,
       portfolio: portfolio_slug(set),
-      pagination: {collection: portfolio_slug(set), per_page: 10, sort_field: "relative_url", sort_reverse: false}
+      pagination: {collection: portfolio_slug(set), per_page: 10, sort_reverse: true}
     }
 
     add_resource "pages", "#{portfolio_slug(set)}.md" do
@@ -81,7 +81,7 @@ class Builders::FlickrPortfolio < SiteBuilder
   def flickr_photoset_photos(flickr, user_id, photoset)
     cache.getset("photoset_#{photoset["id"]}_photos_#{photoset["date_update"]}") do
       log("fetching #{user_id} photoset #{photoset["id"]} photo list")
-      flickr.photosets.getPhotos(user_id: user_id, photoset_id: photoset["id"], media: :photos, extras: "last_update")["photo"]
+      flickr.photosets.getPhotos(user_id: user_id, photoset_id: photoset["id"], media: :photos, extras: %w[last_update date_upload])["photo"]
     end
   end
 
