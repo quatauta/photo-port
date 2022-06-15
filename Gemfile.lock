@@ -98,7 +98,7 @@ GEM
     listen (3.7.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    minitest (5.15.0)
+    minitest (5.16.0)
     multipart-post (2.2.3)
     nio4r (2.5.8)
     parallel (1.22.1)
@@ -117,7 +117,7 @@ GEM
       ffi (~> 1.0)
     regexp_parser (2.5.0)
     rexml (3.2.5)
-    roda (3.56.0)
+    roda (3.57.0)
       rack
     rouge (3.29.0)
     rubocop (1.29.1)
