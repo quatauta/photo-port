@@ -114,9 +114,9 @@
   integrity sha512-bZBrLAIX1kpWelV0XemxBZllyRmM6vgFQQG2GdNb+r3Fkp0FOh1NJSvekXDs7jq70k4euu1cryLMfU+mTXlEpw==
 
 "@fortawesome/fontawesome-free@^6.1.1":
-  version "6.1.2"
-  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-6.1.2.tgz#d18880eddeadd42b1c64cb559f2f3d13d47a4a64"
-  integrity sha512-XwWADtfdSN73/udaFm+1mnGIj/ShDZNFMe/PRoqv3FhQ4GNI2PUN70yFTPsjq65Lw2C9i4TG5/hTbxXIXVCiqQ==
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-6.2.0.tgz#ba3510825b332816fe7190f28827f8cb33a298b5"
+  integrity sha512-CNR7qRIfCwWHNN7FnKUniva94edPdyQzil/zCwk3v6k4R6rR2Fr8i4s3PM7n/lyfPA6Zfko9z5WDzFxG9SW1uQ==
 
 "@honeybadger-io/core@^4.1.1":
   version "4.1.1"
@@ -126,11 +126,12 @@
     stacktrace-parser "^0.1.10"
 
 "@honeybadger-io/js@^4.0.1":
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/@honeybadger-io/js/-/js-4.1.1.tgz#bcd1e4d1e4787a94aa171fbf3de85c807dddecac"
-  integrity sha512-wAA7XUyjaEWWu92V//NanuMNqCbcXDoozOrCOqOaajGSQPj+qN1TabbEcCYCdUk8H+1/vkakXbBAJvf9ccgOOw==
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/@honeybadger-io/js/-/js-4.1.2.tgz#1d8fa887d12f2a9b0fe7473f905317da9cc7632d"
+  integrity sha512-rZV6lJ5X3K1CUq9iX9mhXujywEKPlPY/jixTeWaXqqo5yJrBY/ODdnGNY8Pdh8TOtGI2BjQ01vnZGBhR7KiYeg==
   dependencies:
     "@honeybadger-io/core" "^4.1.1"
+    "@types/aws-lambda" "^8.10.89"
 
 "@hotwired/turbo@^7.1.0":
   version "7.1.0"
@@ -174,6 +175,11 @@
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/@trysound/sax/-/sax-0.2.0.tgz#cccaab758af56761eb7bf37af6f03f326dd798ad"
   integrity sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==
+
+"@types/aws-lambda@^8.10.89":
+  version "8.10.102"
+  resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-8.10.102.tgz#d2402224ec30cdddfb669005c25b6ee01fd6f5be"
+  integrity sha512-BT05v46n9KtSHa9SgGuOvm49eSruJ9utD8iNXpdpuUVYk8wOcqmm1LEzpNRkrXxD0CULc38sdLpk6q3Wa2WOwg==
 
 acorn-node@^1.8.2:
   version "1.8.2"
@@ -287,9 +293,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001370, caniuse-lite@^1.0.30001373:
-  version "1.0.30001383"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001383.tgz#aecf317ccd940690725ae3ae4f28293c5fb8050e"
-  integrity sha512-swMpEoTp5vDoGBZsYZX7L7nXHe6dsHxi9o6/LKf/f0LukVtnrxly5GVb/fWdCDTqi/yw6Km6tiJ0pmBacm0gbg==
+  version "1.0.30001387"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001387.tgz#90d2b9bdfcc3ab9a5b9addee00a25ef86c9e2e1e"
+  integrity sha512-fKDH0F1KOJvR+mWSOvhj8lVRr/Q/mc5u5nabU2vi1/sgvlSqEsE8dOq0Hy/BqVbDkCYQPRRHB1WRjW6PGB/7PA==
 
 chokidar@^3.5.3:
   version "3.5.3"
@@ -509,9 +515,9 @@ domutils@^2.8.0:
     domhandler "^4.2.0"
 
 electron-to-chromium@^1.4.202:
-  version "1.4.233"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.233.tgz#aa142e45468bda111b88abc9cc59d573b75d6a60"
-  integrity sha512-ejwIKXTg1wqbmkcRJh9Ur3hFGHFDZDw1POzdsVrB2WZjgRuRMHIQQKNpe64N/qh3ZtH2otEoRoS+s6arAAuAAw==
+  version "1.4.239"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.239.tgz#5b04acb39c16b897a508980d1be95ba5f0201771"
+  integrity sha512-XbhfzxPIFzMjJm17T7yUGZEyYh5XuUjrA/FQ7JUy2bEd4qQ7MvFTaKpZ6zXZog1cfVttESo2Lx0ctnf7eQOaAQ==
 
 entities@^2.0.0:
   version "2.2.0"
