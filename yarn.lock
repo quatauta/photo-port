@@ -126,9 +126,9 @@
     stacktrace-parser "^0.1.10"
 
 "@honeybadger-io/js@^4.0.1":
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/@honeybadger-io/js/-/js-4.3.0.tgz#4ea6162ead2125fc1d9e6b4d04b1a6b1094fecab"
-  integrity sha512-q/vrnt/iGfhT1emx155KuzQ+rYMatLXpX8aH53N7qcKCbtg1KMCmuBrcbPMMVbC8NDJ41U31YD9v7PghT7RYBw==
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/@honeybadger-io/js/-/js-4.3.1.tgz#d7dd98099ea2597a148726b5cd9f310d066bd148"
+  integrity sha512-CetOrYHO4KziNGFxXYcvI/a09GGDbLBGXgymW+pslD6YrB6G03bVNvmSn55BhTQ92qnyH0KrJX2U4zex8uiVKQ==
   dependencies:
     "@honeybadger-io/core" "^4.3.0"
     "@types/aws-lambda" "^8.10.89"
@@ -177,9 +177,9 @@
   integrity sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==
 
 "@types/aws-lambda@^8.10.89":
-  version "8.10.104"
-  resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-8.10.104.tgz#01ec1d55a08bdf1201150d9ecae39ff7cca9ff4a"
-  integrity sha512-HXZJH8aBa06re9NCtFudOr21izYZycgXIVjd8vFBSNSf6Ca4GYD77TfKqwYgcDqv4olqj5KK+Ks7Xi5IXFbNGA==
+  version "8.10.106"
+  resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-8.10.106.tgz#8f64c61c978e46a592044b5a697cb80ea9a542d3"
+  integrity sha512-yzgMaql7aW1by1XuhKhovuhLyK/1A60lapFXDXXBeHmoyRGQFO2T8lkL3g8hAhHoW5PEvqPJFWPd8jvXiRnxeQ==
 
 acorn-node@^1.8.2:
   version "1.8.2"
@@ -293,9 +293,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001400, caniuse-lite@^1.0.30001407:
-  version "1.0.30001410"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001410.tgz#b5a86366fbbf439d75dd3db1d21137a73e829f44"
-  integrity sha512-QoblBnuE+rG0lc3Ur9ltP5q47lbguipa/ncNMyyGuqPk44FxbScWAeEO+k5fSQ8WekdAK4mWqNs1rADDAiN5xQ==
+  version "1.0.30001412"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001412.tgz#30f67d55a865da43e0aeec003f073ea8764d5d7c"
+  integrity sha512-+TeEIee1gS5bYOiuf+PS/kp2mrXic37Hl66VY6EAfxasIk5fELTktK2oOezYed12H8w7jt3s512PpulQidPjwA==
 
 chokidar@^3.5.3:
   version "3.5.3"
@@ -515,9 +515,9 @@ domutils@^2.8.0:
     domhandler "^4.2.0"
 
 electron-to-chromium@^1.4.251:
-  version "1.4.258"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.258.tgz#44c5456f487be082f038282fbcfd7b06ae99720d"
-  integrity sha512-vutF4q0dTUXoAFI7Vbtdwen/BJVwPgj8GRg/SElOodfH7VTX+svUe62A5BG41QRQGk5HsZPB0M++KH1lAlOt0A==
+  version "1.4.262"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.262.tgz#25715dfbae4c2e0640517cba184715241ecd8e63"
+  integrity sha512-Ckn5haqmGh/xS8IbcgK3dnwAVnhDyo/WQnklWn6yaMucYTq7NNxwlGE8ElzEOnonzRLzUCo2Ot3vUb2GYUF2Hw==
 
 entities@^2.0.0:
   version "2.2.0"
