@@ -134,9 +134,9 @@
     "@types/aws-lambda" "^8.10.89"
 
 "@hotwired/turbo@^7.1.0":
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/@hotwired/turbo/-/turbo-7.2.0.tgz#4ff90d80fda17e69b04a12bbf0a42f09953504f6"
-  integrity sha512-CYr6N9NfqsjhmZx1xVQ8zYcDo4hTm7sTUpJydbNgMRyG+YfF/9ADIQQ2TtcBdkl2zi/12a3OTWX0UMzNZnAK9w==
+  version "7.2.2"
+  resolved "https://registry.yarnpkg.com/@hotwired/turbo/-/turbo-7.2.2.tgz#69e1f4be7f468690fa31791099e2a837e88c9518"
+  integrity sha512-YfTHwnur3tDFS/D5JYstU+09Z3bvCF6euqqXajHAks2lTSIDbLc8gMp8yLomD+cAC337h1wnv0oWduK6+6pUDw==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -177,9 +177,9 @@
   integrity sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==
 
 "@types/aws-lambda@^8.10.89":
-  version "8.10.106"
-  resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-8.10.106.tgz#8f64c61c978e46a592044b5a697cb80ea9a542d3"
-  integrity sha512-yzgMaql7aW1by1XuhKhovuhLyK/1A60lapFXDXXBeHmoyRGQFO2T8lkL3g8hAhHoW5PEvqPJFWPd8jvXiRnxeQ==
+  version "8.10.107"
+  resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-8.10.107.tgz#ef08cc6ceb63d786d58038dbe4f5412db68bc12d"
+  integrity sha512-UTI9ZPw4VzvgYUJ7gUU77/ovGrIniRRWiMWxms5dP+1fsxNPeP/cOopQ0mxXPc9NvbeROcDUDN34m8eEhdEitg==
 
 acorn-node@^1.8.2:
   version "1.8.2"
@@ -461,9 +461,9 @@ define-lazy-prop@^2.0.0:
   integrity sha512-Ds09qNh8yw3khSjiJjiUInaGX9xlqZDY7JVryGxdxV7NPeuqQfplOpQ66yJFZut3jLa5zOwkXw1g9EI2uKh4Og==
 
 defined@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/defined/-/defined-1.0.0.tgz#c98d9bcef75674188e110969151199e39b1fa693"
-  integrity sha512-Y2caI5+ZwS5c3RiNDJ6u53VhQHv+hHKwhkI1iHvceKUHw9Df6EK2zRLfjejRgMuCuxK7PfSWIMwWecceVvThjQ==
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/defined/-/defined-1.0.1.tgz#c0b9db27bfaffd95d6f61399419b893df0f91ebf"
+  integrity sha512-hsBd2qSVCRE+5PmNdHt1uzyrFu5d3RwmFDKzyNZMFq/EwDNJF7Ee5+D5oEKF0hU6LhtoUF1macFvOe4AskQC1Q==
 
 detective@^5.2.1:
   version "5.2.1"
@@ -515,9 +515,9 @@ domutils@^2.8.0:
     domhandler "^4.2.0"
 
 electron-to-chromium@^1.4.251:
-  version "1.4.277"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.277.tgz#6dc3d9724a0a19b7ab155bf8e37967357a081dc5"
-  integrity sha512-Ej4VyUfGdVY5D2J5WHAVNqrEFBKgeNcX7p/bBQU4x/VKwvnyEvGd62NEkIK3lykLEe9Cg4MCcoWAa+u97o0u/A==
+  version "1.4.279"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.279.tgz#84267fec806a8b1c5a1daebf726c4e296e5bcdf9"
+  integrity sha512-xs7vEuSZ84+JsHSTFqqG0TE3i8EAivHomRQZhhcRvsmnjsh5C2KdhwNKf4ZRYtzq75wojpFyqb62m32Oam57wA==
 
 entities@^2.0.0:
   version "2.2.0"
