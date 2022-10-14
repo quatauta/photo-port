@@ -390,9 +390,9 @@ css-what@^6.0.1:
   integrity sha512-HTUrgRJ7r4dsZKU6GjmpfRK1O76h97Z8MfS1G0FozR+oF2kG6Vfe8JE6zwrkbxigziPHinCJ+gCPjA9EaBDtRw==
 
 cssdb@^7.0.1:
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/cssdb/-/cssdb-7.0.1.tgz#3810a0c67ae06362982dfe965dbedf57a0f26617"
-  integrity sha512-pT3nzyGM78poCKLAEy2zWIVX2hikq6dIrjuZzLV98MumBg+xMTNYfHx7paUlfiRTgg91O/vR889CIf+qiv79Rw==
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/cssdb/-/cssdb-7.0.2.tgz#e1cadfe2be318797bd02ca929d2b3c7bac332abc"
+  integrity sha512-Vm4b6P/PifADu0a76H0DKRNVWq3Rq9xa/Nx6oEMUBJlwTUuZoZ3dkZxo8Gob3UEL53Cq+Ma1GBgISed6XEBs3w==
 
 cssesc@^3.0.0:
   version "3.0.0"
@@ -515,9 +515,9 @@ domutils@^2.8.0:
     domhandler "^4.2.0"
 
 electron-to-chromium@^1.4.251:
-  version "1.4.281"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.281.tgz#8e3c7b6ae65d91aa3e8aa84faa6353e3dc758971"
-  integrity sha512-yer0w5wCYdFoZytfmbNhwiGI/3cW06+RV7E23ln4490DVMxs7PvYpbsrSmAiBn/V6gode8wvJlST2YfWgvzWIg==
+  version "1.4.282"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.282.tgz#02af3fd6051e97ac3388a4b11d455bc1ca49838f"
+  integrity sha512-Dki0WhHNh/br/Xi1vAkueU5mtIc9XLHcMKB6tNfQKk+kPG0TEUjRh5QEMAUbRp30/rYNMFD1zKKvbVzwq/4wmg==
 
 entities@^2.0.0:
   version "2.2.0"
