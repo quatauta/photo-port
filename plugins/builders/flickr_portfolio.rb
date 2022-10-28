@@ -40,7 +40,7 @@ class Builders::FlickrPortfolio < SiteBuilder
   end
 
   def add_photo_resource(set:, photo:, index:, info:, exif:, location:, sizes:, layout:)
-    puts "photo #{photo["id"]} #{info.to_hash}"
+    # puts "photo #{photo["id"]} #{info.to_hash}"
     frontmatter = {
       layout: layout,
       portfolio: portfolio_slug(set),
