@@ -82,4 +82,4 @@ end
 
 # end of helpers
 
-ARGV[0] == "help" ? help : setup
+(ARGV[0] == "help") ? help : setup
