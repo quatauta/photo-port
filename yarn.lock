@@ -118,19 +118,19 @@
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-6.2.1.tgz#344baf6ff9eaad7a73cff067d8c56bfc11ae5304"
   integrity sha512-viouXhegu/TjkvYQoiRZK3aax69dGXxgEjpvZW81wIJdxm5Fnvp3VVIP4VHKqX4SvFw6qpmkILkD4RJWAdrt7A==
 
-"@honeybadger-io/core@^4.6.0":
-  version "4.6.0"
-  resolved "https://registry.yarnpkg.com/@honeybadger-io/core/-/core-4.6.0.tgz#bff3128212a6fbfd15d5d6b87aee2f9417021da3"
-  integrity sha512-1AEw40GTSIFCG9jyQDGCk+tATRbrlJGG2YJK74PelRDAEeB+FvWy5uFWAaRyDN43XMrGYAT4ZDcVn4q4T1uw1Q==
+"@honeybadger-io/core@^4.8.0":
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/@honeybadger-io/core/-/core-4.8.0.tgz#240e6b221f95cdb10c43fb917485979f2855f896"
+  integrity sha512-hGsnMOAdfRn7+OTi6BJM9SrvcWNMWoG9YmV9eyx847ZKeIcd3Cb4XOrtNQwXMKxpdPAoG03rOnJhaxpJZY1u/g==
   dependencies:
     stacktrace-parser "^0.1.10"
 
 "@honeybadger-io/js@^4.0.1":
-  version "4.7.4"
-  resolved "https://registry.yarnpkg.com/@honeybadger-io/js/-/js-4.7.4.tgz#2159d4b041f87e369fc124a78fba964a1b9573f2"
-  integrity sha512-txSpXlXSyT76HtusjJ5qLTIksE9zToj1liWD/p6s1QgOsq7Cz7DzbnGW39hgBQlH5qRnicqKIYFL9gVV232Zrg==
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/@honeybadger-io/js/-/js-4.8.0.tgz#5e1361a38a641d2237dd86af330848a3e85ca9f1"
+  integrity sha512-N1ONRY22CwWejhk6dqkNgFhkVVuvjBlN0yafASbG7Ov610eySxD1U5lDWERs62BMWKsR0vxy8+PYr+FvGxw0og==
   dependencies:
-    "@honeybadger-io/core" "^4.6.0"
+    "@honeybadger-io/core" "^4.8.0"
     "@types/aws-lambda" "^8.10.89"
     "@types/express" "^4.17.13"
 
@@ -1552,9 +1552,9 @@ postcss-value-parser@^4.0.0, postcss-value-parser@^4.2.0:
   integrity sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==
 
 postcss@^8.4.11, postcss@^8.4.18:
-  version "8.4.19"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.19.tgz#61178e2add236b17351897c8bcc0b4c8ecab56fc"
-  integrity sha512-h+pbPsyhlYj6N2ozBmHhHrs9DzGmbaarbLvWipMRO7RLS+v4onj26MPFXA5OBYFxyqYhUJK456SwDcY9H2/zsA==
+  version "8.4.20"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.20.tgz#64c52f509644cecad8567e949f4081d98349dc56"
+  integrity sha512-6Q04AXR1212bXr5fh03u8aAwbLxAQNGQ/Q1LNa0VfOI06ZAlhPHtQvE4OIdpj4kLThXilalPnmDSOD65DcHt+g==
   dependencies:
     nanoid "^3.3.4"
     picocolors "^1.0.0"
