@@ -84,7 +84,7 @@ GEM
     hash_with_dot_access (1.2.0)
       activesupport (>= 5.0.0, < 8.0)
     honeybadger (5.2.1)
-    i18n (1.12.0)
+    i18n (1.13.0)
       concurrent-ruby (~> 1.0)
     json (2.6.3)
     kramdown (2.4.0)
