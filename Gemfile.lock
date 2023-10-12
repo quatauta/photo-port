@@ -1,9 +1,9 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    activemodel (7.1.0)
-      activesupport (= 7.1.0)
-    activesupport (7.1.0)
+    activemodel (7.1.1)
+      activesupport (= 7.1.1)
+    activesupport (7.1.1)
       base64
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
@@ -107,7 +107,7 @@ GEM
     rb-fsevent (0.11.2)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    regexp_parser (2.8.1)
+    regexp_parser (2.8.2)
     rexml (3.2.6)
     roda (3.72.0)
       rack
@@ -135,18 +135,18 @@ GEM
       activesupport (>= 6.0)
       erubi (>= 1.10)
       tilt (~> 2.0)
-    standard (1.31.1)
+    standard (1.31.2)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.0)
-      rubocop (~> 1.56.2)
+      rubocop (~> 1.56.4)
       standard-custom (~> 1.0.0)
       standard-performance (~> 1.2)
     standard-custom (1.0.2)
       lint_roller (~> 1.0)
       rubocop (~> 1.50)
-    standard-performance (1.2.0)
+    standard-performance (1.2.1)
       lint_roller (~> 1.1)
-      rubocop-performance (~> 1.19.0)
+      rubocop-performance (~> 1.19.1)
     thor (1.2.2)
     tilt (2.3.0)
     tzinfo (2.0.6)
