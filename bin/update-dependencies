@@ -4,16 +4,18 @@ set -e
 
 PROJECT_ROOT="$(realpath "$(dirname "$0")/..")"
 
-echo "[ $0 ] Updating asdf-managed tools"
-while read -r TOOL_NAME ; do
-  asdf install "${TOOL_NAME}" latest
-  asdf local "${TOOL_NAME}" latest
-done < <(cut -d' ' -f1 "${PROJECT_ROOT}/.tool-versions")
+echo "[ $0 ] Updating mise-managed tools"
+awk '/^\s*[^[:space:]]/ { print $1 }' "${PROJECT_ROOT}/.tool-versions" |
+while read -r TOOL ; do
+  mise install "${TOOL}@latest"
+  mise use --pin "${TOOL}@latest"
+done
 
 echo "[ $0 ] Updating Ruby gems"
 bundle update --all --quiet
 
 echo "[ $0 ] Updating JavaScript packages"
+corepack enable
 yarn upgrade | grep -v -E '^(info (All|Direct) dependencies)|([├└])'
 
 # Turning off exit-on-error because the outdated commands # will usually exit nonzero and
